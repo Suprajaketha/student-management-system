@@ -1,0 +1,10 @@
+name: Basicworkflow Dispatch Example
+
+on:
+ workflow_dispatch:
+
+jobs:
+ deploy:
+  run-on: windows-latest
+  steps:   
+   - run: echo"me did the thing!"
