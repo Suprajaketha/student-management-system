@@ -39,6 +39,9 @@
 name: .NET Core Desktop
 
 on:
+  workflow_dispatch:
+  
+on:
   push:
     branches: [ "master" ]
   pull_request:
