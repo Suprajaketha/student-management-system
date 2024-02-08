@@ -47,16 +47,55 @@ on:
 
 jobs:
 
-  build:
+    DEV:
+     #The type of runner that the job will run on 
+     runs-on: windows-2019
+     environment: DEV
+ #steps represent a sequence of tast 
+     steps:   
+        
+      - uses: actions/checkout@v2
 
-    strategy:
-      matrix:
+        
+    -name: Run a script
+    run: |
+          echo "I am running a job in the DEV environment"
+
+    QA: 
+     runs-on: windows-2019
+     environment: QA
+     needs: DEV
+
+     steps: 
+      - uses: actions/checkout@v2
+
+        -name: Run a script
+        run: |
+         echo "I am running a job in the QA environment"
+
+    PROD:
+      runs-on: windows-2019
+      environment: PROD
+      needs: QA
+
+      steps: 
+       - uses: actions/checkout@v2
+
+       - name: Run a script
+         run: |
+            echo "I am running a job in the PROD environment"
+        
+        build:
+
+       strategy:
+       matrix:
         configuration: [Debug, Release]
 
-    runs-on: windows-2019  # For a list of available runner types, refer to
+       runs-on: windows-2019  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-
-    env:
+                             
+                             
+     env:
       Solution_Name: your-solution-name                         # Replace with your solution name, i.e. MyWpfApp.sln.
       Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
       Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
