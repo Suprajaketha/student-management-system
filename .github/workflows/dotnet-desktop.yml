@@ -46,18 +46,16 @@ on:
       branches: [ "master"]
 
 jobs:
-
-  deployment:
-    runs-on: windows-2019
-    environment: DEV
-    steps:
-      - name: deploy
-
-
- 
   build:
-
-       strategy:
+    runs-on: windows-2019
+    environment:
+      name: DEV
+      steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+  
+   
+  strategy:
        matrix:
         configuration: [Debug, Release]
 
