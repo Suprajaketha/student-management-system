@@ -79,6 +79,7 @@ jobs:
       environment: PROD
       needs: QA
 
+      
       steps: 
       
        - uses: actions/checkout@v2
@@ -87,7 +88,7 @@ jobs:
          run: |
             echo "I am running a job in the PROD environment"
         
-        build:
+ build:
 
        strategy:
        matrix:
