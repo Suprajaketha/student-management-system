@@ -40,10 +40,7 @@ name: .NET Core Desktop
   
 on:
  workflow_dispatch:
- push:
-    branches: [ "master" ]
- pull_request:
-      branches: [ "master"]
+
 jobs:
   build:
     runs-on: windows-2019
@@ -52,9 +49,13 @@ jobs:
       steps:
       - name: Check out repository
         uses: actions/checkout@v2
+  push:
+    branches: [ "master" ]
+  pull_request:
+      branches: [ "master"]
+
   
-   
-  strategy:
+     strategy:
        matrix:
         configuration: [Debug, Release]
 
