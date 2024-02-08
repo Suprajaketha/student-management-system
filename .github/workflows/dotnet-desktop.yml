@@ -47,48 +47,15 @@ on:
 
 jobs:
 
-    DEV:
-     #The type of runner that the job will run on 
-     runs-on: windows-2019
-     environment: DEV
- #steps represent a sequence of tast 
-     steps:   
-        
-      - uses: actions/checkout@v2
+  deployment:
+    runs-on: windows-2019
+    environment: DEV
+    steps:
+      - name: deploy
 
-        
-    -name: Run a script
-    run: |
-          echo "I am running a job in the DEV environment"
 
-    QA: 
-     runs-on: windows-2019
-     environment: QA
-     needs: DEV
-
-     steps:
-     
-      - uses: actions/checkout@v2
-
-        -name: Run a script
-        run: |
-         echo "I am running a job in the QA environment"
-
-    PROD:
-      runs-on: windows-2019
-      environment: PROD
-      needs: QA
-
-      
-      steps: 
-      
-       - uses: actions/checkout@v2
-
-       - name: Run a script
-         run: |
-            echo "I am running a job in the PROD environment"
-        
- build:
+ 
+  build:
 
        strategy:
        matrix:
