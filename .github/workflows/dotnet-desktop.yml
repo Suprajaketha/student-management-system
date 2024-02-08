@@ -45,9 +45,30 @@ on:
     branches: [ "master" ]
   pull_request:
       branches: [ "master"]
-     
-  build: 
- strategy:
+jobs:
+  build:
+    runs-on: windows-2019
+    environment:
+      name: DEV
+      steps:
+      - name: Check out repository
+        uses: actions/checkout@v2 
+
+        runs-on: windows-2019
+        environment:
+         name: QA
+        steps: 
+        - name: Check out repository
+          uses: action/checkout@v2
+
+          runs-on: windows-2019
+          environment:
+           name: PROD
+          steps:
+        - name: Check out repository
+          uses: actions/checkout@v2 
+           
+  strategy:
        matrix:
         configuration: [Debug, Release]
 
@@ -61,7 +82,7 @@ env:
  Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
  Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
  
-     steps:
+      steps:
       
     - name: Checkout
       uses: actions/checkout@v3
