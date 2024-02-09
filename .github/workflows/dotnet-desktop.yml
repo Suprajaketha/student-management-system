@@ -38,7 +38,13 @@
 
 name: .NET Core Desktop
 on:
-  workflow_dispatch:
+ workflow_dispatch:
+
+jobs:
+ deploy:
+  runs-on: ubuntu-latest
+  steps:   
+   - run: echo"me did the thing!"
   push:
     branches: [ "master" ]
   pull_request:
