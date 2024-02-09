@@ -45,44 +45,28 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master"]
-
-jobs:
-  build:
-    runs-on: windows-2019
-    environment:
-      name: Development
-      steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-    
-      environment:
-        name: production
-        steps:
-        - name: Check out repository
-          uses: actions/checkout@v2
-     
-        environment:
-         name: staging
-         steps:
-         - name: Check out repository
-           uses: actions/checkout@v2
-           
-
-  on:
+on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Select the environment'
-        required: true
-      options: ['Development', 'Production', 'Staging']
-
+      choice:
+        type: choice
+        description: select the environment
+        options:
+        - Dev
+        - PROD
+        - QA
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up environment
-        run: echo "Selected environment is ${{ github.event.inputs.environment }}"
+      - uses: actions/checkout@v2
+
+      - name: greet
+        run: | 
+          echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
+          echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
+          echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
 
            
   strategy:
