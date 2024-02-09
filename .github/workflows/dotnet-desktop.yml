@@ -37,7 +37,6 @@
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
 
 name: .NET Core Desktop
-  
 on:
   workflow_dispatch:
 
@@ -45,6 +44,8 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master"]
+    
+
 on:
   workflow_dispatch:
     inputs:
