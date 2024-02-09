@@ -1,20 +1,13 @@
 name: Basicworkflow Dispatch Example
 
 on:
- workflow_dispatch:
-
-jobs:
- deploy:
-  runs-on: ubuntu-latest
-  steps:   
-   - run: echo"me did the thing!"
-on:
   workflow_dispatch:
     inputs:
       environment:
         description: 'Select the environment'
         required: true
         options: ['DEV', 'QA', 'PROD']
+   
 
 jobs:
   build:
