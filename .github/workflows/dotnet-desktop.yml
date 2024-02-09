@@ -39,20 +39,40 @@
 name: .NET Core Desktop
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
-jobs:
+ 
+    inputs:
+      environment:
+        description: 'Select the environment'
+        required: true
+        default: 'production'
+        options:
+          - 'production'
+          - 'staging'
+          - 'development'
 
+jobs:
   build:
+    runs-on: windows-2019
+
+    env:
+      ENVIRONMENT: ${{ github.event.inputs.environment }}
+
+    steps:
+      - name: Set up environment
+        run: echo "Selected environment is $ENVIRONMENT"
+
 
     strategy:
       matrix:
         configuration: [Debug, Release]
 
-    runs-on: windows-2019  # For a list of available runner types, refer to
+  runs-on: windows-2019  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
