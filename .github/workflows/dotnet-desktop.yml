@@ -39,34 +39,36 @@
 name: .NET Core Desktop
   
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
   push:
     branches: [ "master" ]
   pull_request:
-      branches: [ "master"]
+    branches: [ "master"]
+
+    inputs:
+      environment:
+        description: 'Select the environment'
+        required: true
+        default: 'production'
+        options:
+          - 'production'
+          - 'staging'
+          - 'development'
+
 jobs:
   build:
     runs-on: windows-2019
-    environment:
-      name: DEV
-      steps:
-      - name: Check out repository
-        uses: actions/checkout@v2 
 
-        runs-on: windows-2019
-        environment:
-         name: QA
-        steps: 
-        - name: Check out repository
-          uses: action/checkout@v2
+    env:
+      ENVIRONMENT: ${{ github.event.inputs.environment }}
 
-          runs-on: windows-2019
-          environment:
-           name: PROD
-          steps:
-        - name: Check out repository
-          uses: actions/checkout@v2 
+    steps:
+      - name: Set up environment
+        run: echo "Selected environment is $ENVIRONMENT"
+
+
+
            
   strategy:
        matrix:
