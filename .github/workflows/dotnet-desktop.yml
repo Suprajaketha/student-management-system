@@ -46,6 +46,31 @@ on:
   pull_request:
     branches: [ "master"]
 
+jobs:
+  build:
+    runs-on: windows-2019
+    environment:
+      name: Development
+      steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+    build:
+     runs-on: windows-2019
+     environment:
+        name: production
+        steps:
+        - name: Check out repository
+          uses: actions/checkout@v2
+     build:
+      runs-on: windows-2019
+      environment:
+        name: staging
+        steps:
+        - name: Check out repository
+          uses: actions/checkout@v2
+         
+  
+      
     inputs:
       environment:
         description: 'Select the environment'
@@ -54,10 +79,10 @@ on:
         options:
           - 'production'
           - 'staging'
-          - 'development'
+          - 'Development'
 
-jobs:
-  build:
+  jobs:
+   build:
     runs-on: windows-2019
 
     env:
