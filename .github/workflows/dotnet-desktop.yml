@@ -54,45 +54,35 @@ jobs:
       steps:
       - name: Check out repository
         uses: actions/checkout@v2
-    build:
-     runs-on: windows-2019
-     environment:
+    
+      environment:
         name: production
         steps:
         - name: Check out repository
           uses: actions/checkout@v2
-     build:
-      runs-on: windows-2019
-      environment:
-        name: staging
-        steps:
-        - name: Check out repository
-          uses: actions/checkout@v2
-         
-  
-      
+     
+        environment:
+         name: staging
+         steps:
+         - name: Check out repository
+           uses: actions/checkout@v2
+           
+
+  on:
+  workflow_dispatch:
     inputs:
       environment:
         description: 'Select the environment'
         required: true
-        default: 'production'
-        options:
-          - 'production'
-          - 'staging'
-          - 'Development'
+      options: ['Development', 'Production', 'Staging']
 
-  jobs:
-   build:
-    runs-on: windows-2019
-
-    env:
-      ENVIRONMENT: ${{ github.event.inputs.environment }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Set up environment
-        run: echo "Selected environment is $ENVIRONMENT"
-
-
+        run: echo "Selected environment is ${{ github.event.inputs.environment }}"
 
            
   strategy:
