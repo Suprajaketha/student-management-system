@@ -12,8 +12,10 @@ on:
 jobs:
  deploy:
   runs-on: ubuntu-latest
-  steps:   
-   - run:  echo "Selected environment is ${{ github.event.inputs.environment }}"  
+  steps:
+     - name: Set up environment
+
+       run:  echo "Selected environment is ${{ github.event.inputs.environment }}"  
    
  build:
     runs-on: ubuntu-latest
