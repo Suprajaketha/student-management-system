@@ -26,55 +26,39 @@ jobs:
         run: | 
           echo "environment is ${{ inputs.environment }}"
           echo "boolean is ${{ inputs.boolean }}"
-          
-
+ 
 
  bar_environment:
     name: Build on BAR environment
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.environment == 'BAR' }}
+    if: ${{ github.event.inputs.environment != 'BAR' }}
 
     steps:
-      - name: Set up job
-        run: echo "Set up job"
-
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Build on BAR environment
-        run: echo "Hello, world!"
-
-      - name: Post checkout repository
-        run: echo "Post checkout repository"
-
-      - name: Complete job
-        run: echo "Complete job"
+      - name: Pause job
+        run: echo "Paused"
         
  foo_environment:
     name: Build on FOO environment
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.environment == 'FOO' }}
+    if: ${{ github.event.inputs.environment != 'FOO' }}
 
     steps:
-      - name: Set up job
-        run: echo "Set up job"
-
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Build on FOO environment
-        run: echo "I did the thing!"
-
-      - name: Post checkout repository
-        run: echo "Post checkout repository"
-
-      - name: Complete job
-        run: echo "Complete job"
+      - name: Pause job
+        run: echo "Paused"
 
  ree_environment:
     name: Build on REE environment
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.environment == 'REE' }}
+    if: ${{ github.event.inputs.environment != 'REE' }}
+
+    steps:
+      - name: Pause job
+        run: echo "Paused"
+
+ selected_environment:
+    name: Build on Selected Environment
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.environment == 'BAR' || github.event.inputs.environment == 'FOO' || github.event.inputs.environment == 'REE' }}
 
     steps:
       - name: Set up job
@@ -83,11 +67,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Build on REE environment
-        run: echo "This is the thing!"
+      - name: Run selected option
+        run: |
+          case ${{ github.event.inputs.environment }} in
+            BAR)
+              echo "Hello, world!"
+              ;;
+            FOO)
+              echo "I did the thing!"
+              ;;
+            REE)
+              echo "This is the thing!"
+              ;;
+          esac
 
       - name: Post checkout repository
         run: echo "Post checkout repository"
 
       - name: Complete job
-        run: echo "Complete job"
+        run: echo "Complete job"         
+
+
