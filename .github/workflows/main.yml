@@ -10,8 +10,8 @@ on:
         - FOO
         - REE
 
-      environment:
-        description: 'Select an environment to build (BAR, FOO, REE)'
+    
+        
         required: true
         default: 'BAR'  # Default environment
 
