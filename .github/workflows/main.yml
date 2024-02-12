@@ -49,7 +49,5 @@ jobs:
         if: ${{ github.event.inputs.environment == 'REE' }}
         run: echo "This is the thing!"
 
-      - name: Complete job
-        run: echo "Complete job"
-
+      
         
