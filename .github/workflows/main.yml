@@ -27,22 +27,27 @@ jobs:
           echo "environment is ${{ inputs.environment }}"
           echo "boolean is ${{ inputs.boolean }}"
           echo "choice is ${{ inputs.choice }}"
- test:
-      runs-on: ubuntu-latest
 
-      steps:
-      - uses: actions/checkout@v2
 
-      - name: greet
+ build_environment:
+    name: Build on ${{ github.event.inputs.environment }} environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Run selected action
         run: |
-          if [ "${{ inputs.choice }}" = "bar" ]; then
+          environment=${{ github.event.inputs.environment }}
+          if [ $environment = "BAR" ]; then
             echo "Hello, world!"
-          elif [ "${{ inputs.choice }}" = "foo" ]; then
+          elif [ $environment = "FOO" ]; then
             echo "I did the thing!"
-          elif [ "${{ inputs.choice }}" = "ree" ]; then
+          elif [ $environment = "REE" ]; then
             echo "This is the thing!"
+          elif [ $environment = "STG" ]; then
+            echo "Building on STG environment"
           else
-            echo "Unknown choice: ${{ inputs.choice }}"
+            echo "Invalid selection"
           fi
-       
-          
