@@ -33,9 +33,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up job
-        run: echo "Set up job"
-
+     
       - name: Checkout repository
         uses: actions/checkout@v2
       
@@ -50,9 +48,6 @@ jobs:
       - name: Build on REE environment
         if: ${{ github.event.inputs.environment == 'REE' }}
         run: echo "This is the thing!"
-
-      - name: Post checkout repository
-        run: echo "Post checkout repository"
 
       - name: Complete job
         run: echo "Complete job"
