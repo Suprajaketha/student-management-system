@@ -46,8 +46,6 @@ jobs:
             echo "I did the thing!"
           elif [ $environment = "REE" ]; then
             echo "This is the thing!"
-          elif [ $environment = "STG" ]; then
-            echo "Building on STG environment"
           else
             echo "Invalid selection"
           fi
