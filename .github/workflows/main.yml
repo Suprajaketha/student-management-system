@@ -28,3 +28,30 @@ jobs:
           echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
           echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
           echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
+          
+          BAR:
+          runs-on: ubuntu-latest
+
+          steps:
+          - uses: action/checkout@v2
+          -name: Run a script1
+          run: echo Hello, world!
+
+          FOO:
+          runs-on: ubuntu-latest
+
+          steps:
+          - uses: action/checkout@v2
+          - name: Run a script2
+          run: echo I did the thing!
+
+          REE:
+          runs-on: ubuntu-latest
+
+          steps:
+          - uses: action/checkout@v2
+          - name: run a script3
+          run: echo Do the Thing!
+          
+
+          
