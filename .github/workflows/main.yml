@@ -28,24 +28,33 @@ jobs:
           echo "boolean is ${{ inputs.boolean }}"
           echo "choice is ${{ inputs.choice }}"
 
-
  build_environment:
     name: Build on ${{ github.event.inputs.environment }} environment
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set up job
+        run: echo "Set up job"
+
       - name: Checkout repository
         uses: actions/checkout@v2
       
-      - name: Run selected action
-        run: |
-          environment=${{ github.event.inputs.environment }}
-          if [ $environment = "BAR" ]; then
-            echo "Hello, world!"
-          elif [ $environment = "FOO" ]; then
-            echo "I did the thing!"
-          elif [ $environment = "REE" ]; then
-            echo "This is the thing!"
-          else
-            echo "Invalid selection"
-          fi
+      - name: Build on BAR environment
+        if: ${{ github.event.inputs.environment == 'BAR' }}
+        run: echo "Hello, world!"
+
+      - name: Build on FOO environment
+        if: ${{ github.event.inputs.environment == 'FOO' }}
+        run: echo "I did the thing!"
+
+      - name: Build on REE environment
+        if: ${{ github.event.inputs.environment == 'REE' }}
+        run: echo "This is the thing!"
+
+      - name: Post checkout repository
+        run: echo "Post checkout repository"
+
+      - name: Complete job
+        run: echo "Complete job"
+
+        
