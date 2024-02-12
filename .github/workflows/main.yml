@@ -17,7 +17,7 @@ jobs:
 
        run:  echo "Selected environment is ${{ github.event.inputs.environment }}"  
        
-  build:
+ build:
     runs-on: ubuntu-latest
 
     steps:
