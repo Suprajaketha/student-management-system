@@ -27,30 +27,22 @@ jobs:
           echo "environment is ${{ inputs.environment }}"
           echo "boolean is ${{ inputs.boolean }}"
           echo "choice is ${{ inputs.choice }}"
+ test:
+      runs-on: ubuntu-latest
 
-          bar:
-          runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
 
-          steps:
-          - uses: action/checkout@v2
-          -name: Run a script1
-          run: echo Hello, world!
-
-          foo:
-          runs-on: ubuntu-latest
-
-          steps:
-          - uses: action/checkout@v2
-          - name: Run a script2
-          run: echo I did the thing!
-
-          ree:
-          runs-on: ubuntu-latest
-
-          steps:
-          - uses: action/checkout@v2
-          - name: run a script3
-          run: echo Do the Thing!
-          
-
+      - name: greet
+        run: |
+          if [ "${{ inputs.choice }}" = "bar" ]; then
+            echo "Hello, world!"
+          elif [ "${{ inputs.choice }}" = "foo" ]; then
+            echo "I did the thing!"
+          elif [ "${{ inputs.choice }}" = "ree" ]; then
+            echo "This is the thing!"
+          else
+            echo "Unknown choice: ${{ inputs.choice }}"
+          fi
+       
           
