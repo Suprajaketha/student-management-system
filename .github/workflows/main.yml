@@ -27,33 +27,49 @@ jobs:
           echo "environment is ${{ inputs.environment }}"
           echo "boolean is ${{ inputs.boolean }}"
           echo "choice is ${{ inputs.choice }}"
+    bar_environment:
+       name: Build on BAR environment
+       runs-on: ubuntu-latest
+       if: ${{ github.event.inputs.environment == 'BAR' }}
+       steps:
 
- build_environment:
-    name: Build on ${{ github.event.inputs.environment }} environment
-    runs-on: ubuntu-latest
+       - name: Checkout repository
+         uses: actions/checkout@v2
+      
+       - name: Build on BAR environment
+         run: echo "Hello, world!"
 
-    steps:
+          foo_environment:
+         name: Build on FOO environment
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.environment == 'FOO' }}
+        steps:
+      
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Build on FOO environment
+        run: echo "I did the thing!"
+
+      - name: Post checkout repository
+        run: echo "Post checkout repository"
+
+      - name: Complete job
+        run: echo "Complete job"
+ 
+        ree_environment:
+         name: Build on REE environment
+         runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.environment == 'REE' }}
+
+        steps:
      
       - name: Checkout repository
         uses: actions/checkout@v2
       
-      - name: Build on BAR environment
-        if: ${{ github.event.inputs.environment == 'BAR' }}
-        run: echo "Hello, world!"
-
-      - name: Build on FOO environment
-        if: ${{ github.event.inputs.environment == 'FOO' }}
-        run: |
-          echo "I did the thing!"
-          exit 1  # Exit to pause execution after this step
-
       - name: Build on REE environment
-        if: ${{ github.event.inputs.environment == 'REE' }}
-        run: |
-          echo "This is the thing!"
-          exit 1  # Exit to pause execution after this step
-
-
-
+        run: echo "This is the thing!"
+ 
       
+        
         
