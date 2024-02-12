@@ -43,11 +43,17 @@ jobs:
 
       - name: Build on FOO environment
         if: ${{ github.event.inputs.environment == 'FOO' }}
-        run: echo "I did the thing!"
+        run: |
+          echo "I did the thing!"
+          exit 1  # Exit to pause execution after this step
 
       - name: Build on REE environment
         if: ${{ github.event.inputs.environment == 'REE' }}
-        run: echo "This is the thing!"
+        run: |
+          echo "This is the thing!"
+          exit 1  # Exit to pause execution after this step
+
+
 
       
         
