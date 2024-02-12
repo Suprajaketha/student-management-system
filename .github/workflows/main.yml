@@ -17,8 +17,7 @@ jobs:
 
        run:  echo "Selected environment is ${{ github.event.inputs.environment }}"  
        
-       
- build:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,6 +27,8 @@ jobs:
           echo "environment is ${{ inputs.environment }}"
           echo "boolean is ${{ inputs.boolean }}"
           echo "choice is ${{ inputs.choice }}"
+          
+            
  bar_environment:
     name: Build on BAR environment
     runs-on: ubuntu-latest
@@ -59,6 +60,7 @@ jobs:
         run: echo "Set up job"
 
       - name: Pause job
+        if: ${{ github.event.inputs.environment != 'FOO' }}
         run: echo "Paused"
 
  ree_environment:
@@ -71,9 +73,5 @@ jobs:
         run: echo "Set up job"
 
       - name: Pause job
+        if: ${{ github.event.inputs.environment != 'REE' }}
         run: echo "Paused"
-
-
-      
-
-    
