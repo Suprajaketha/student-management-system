@@ -6,9 +6,9 @@ on:
         type: choice
         description: select the environment
         options:
-        - Dev
-        - PROD
-        - QA
+        - BAR
+        - FOO
+        - REE
 jobs:
  deploy:
   runs-on: ubuntu-latest
