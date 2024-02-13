@@ -1,62 +1,44 @@
 name: Basicworkflow Dispatch Example
-on:
-  workflow_dispatch: 
-   inputs:
-      choice:
-        type: choice
-        description: select the environment
-        options:
-        - BAR
-        - FOO
-        - REE
 
-    
-      environment: 
+
+on:
+  workflow_dispatch:
+    inputs:
+      dropdown_option:
+        description: 'Select an option'
         required: true
-        default: 'BAR'  # Default environment
+        default: 'BAR'
+        options: ['BAR', 'FOO', 'REE']
 
 jobs:
-  bar_environment:
-    name: Build on BAR environment
+  run_selected_option:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.environment == 'BAR' }}
-
     steps:
-     
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Build on BAR environment
-        run: echo "Hello, world!"
-
-      - name: Post checkout repository
-        run: echo "Post checkout repository"
-
-     
-        
-  foo_environment:
-    name: Build on FOO environment
-    runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.environment == 'FOO' }}
-
-    steps:
-
-      - name: Build on FOO environment
-        run: echo "I did the Thing!"
       
-      - name: Pause job
-        run: echo "Paused"
-        
-  ree_environment:
-    name: Build on REE environment
-    runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.environment == 'REE' }}
-
-    steps:
-
-     - name: Build on REE environmnet
-       run: echo "This is the Thing!"
-       
-     - name: Pause job
-       run: echo "Paused"
-       
+      - name: Run selected option
+        run: |
+          case ${{ github.event.inputs.dropdown_option }} in
+            "BAR")
+              echo "hello world!"
+              ;;
+            "FOO")
+              echo "I did the thing!"
+              ;;
+            "REE")
+              echo "This is the thing!"
+              ;;
+          esac
+      
+      - name: Pause other options
+        if: ${{ github.event.inputs.dropdown_option != 'BAR' }}
+        run: echo "Option BAR paused"
+      
+      - name: Pause other options
+        if: ${{ github.event.inputs.dropdown_option != 'FOO' }}
+        run: echo "Option FOO paused"
+      
+      - name: Pause other options
+        if: ${{ github.event.inputs.dropdown_option != 'REE' }}
+        run: echo "Option REE paused"
