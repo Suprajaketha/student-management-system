@@ -3,6 +3,14 @@ name: Run Selected Option
 on:
   workflow_dispatch:
     inputs:
+     choice:
+        type: choice
+        description: select the environment
+        options:
+        - BAR
+        - FOO
+        - REE
+
      dropdown_option:
         description: 'Select the environment'
         required: true
