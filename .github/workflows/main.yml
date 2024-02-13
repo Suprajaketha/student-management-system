@@ -5,10 +5,11 @@ on:
   workflow_dispatch:
     inputs:
       dropdown_option:
+      
         description: 'Select an option'
         required: true
-        default: 'SELECT'
-        options: ['SELECT']
+        options: ['BAR', 'FOO', 'REE']
+
 
 jobs:
   run_selected_option:
