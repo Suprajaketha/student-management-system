@@ -7,8 +7,8 @@ on:
       dropdown_option:
         description: 'Select an option'
         required: true
-        default: 'BAR'
-        options: ['BAR', 'FOO', 'REE']
+        default: 'SELECT'
+        options: ['SELECT']
 
 jobs:
   run_selected_option:
@@ -16,29 +16,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
+
       - name: Run selected option
+        if: ${{ github.event.inputs.dropdown_option == 'BAR' }}
         run: |
-          case ${{ github.event.inputs.dropdown_option }} in
-            "BAR")
-              echo "hello world!"
-              ;;
-            "FOO")
-              echo "I did the thing!"
-              ;;
-            "REE")
-              echo "This is the thing!"
-              ;;
-          esac
-      
-      - name: Pause other options
-        if: ${{ github.event.inputs.dropdown_option != 'BAR' }}
-        run: echo "Option BAR paused"
-      
-      - name: Pause other options
-        if: ${{ github.event.inputs.dropdown_option != 'FOO' }}
-        run: echo "Option FOO paused"
-      
-      - name: Pause other options
-        if: ${{ github.event.inputs.dropdown_option != 'REE' }}
-        run: echo "Option REE paused"
+          echo "hello world!"
+
+      - name: Run selected option
+        if: ${{ github.event.inputs.dropdown_option == 'FOO' }}
+        run: |
+          echo "I did the thing!"
+
+      - name: Run selected option
+        if: ${{ github.event.inputs.dropdown_option == 'REE' }}
+        run: |
+          echo "This is the thing!"
+
