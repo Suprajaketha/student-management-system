@@ -22,9 +22,7 @@ jobs:
     if: ${{ github.event.inputs.environment == 'BAR' }}
 
     steps:
-      - name: Set up job
-        run: echo "Set up job"
-
+     
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -34,8 +32,7 @@ jobs:
       - name: Post checkout repository
         run: echo "Post checkout repository"
 
-      - name: Complete job
-        run: echo "Complete job"
+     
         
   foo_environment:
     name: Build on FOO environment
@@ -43,6 +40,10 @@ jobs:
     if: ${{ github.event.inputs.environment == 'FOO' }}
 
     steps:
+
+      - name: Build on FOO environment
+        run: echo "I did the Thing!"
+      
       - name: Pause job
         run: echo "Paused"
         
@@ -52,6 +53,10 @@ jobs:
     if: ${{ github.event.inputs.environment == 'REE' }}
 
     steps:
-      - name: Pause job
-        run: echo "Paused"
+
+     - name: Build on REE environmnet
+       run: echo "This is the Thing!"
+       
+     - name: Pause job
+       run: echo "Paused"
        
