@@ -1,35 +1,8 @@
 name: .NET Core Desktop
 on:
   workflow_dispatch: 
-   inputs:
-      choice:
-        type: choice
-        description: select the environment
-        options:
-        - Dev
-        - PROD
-        - QA
-jobs:
- deploy:
-  runs-on: ubuntu-latest
-  steps:
-     - name: Set up environment
-
-       run:  echo "Selected environment is ${{ github.event.inputs.environment }}"  
-   
- build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: greet
-        run: | 
-          echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
-          echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
-          echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
-
- DEV:  
+jobs:  
+  DEV:  
 
      #The type of runner that the job will run on 
      runs-on:  ubuntu-latest
@@ -43,7 +16,7 @@ jobs:
       - name: Run a script
         run: |
          echo "I am running a job in the DEV environment"
- QA: 
+  QA: 
      runs-on:  ubuntu-latest
      environment: QA
      needs: DEV
@@ -55,19 +28,18 @@ jobs:
       - name: Run a script
         run: |
          echo "I am running a job in the QA environment"
-
- PROD:
-      runs-on:  ubuntu-latest
-      environment: PROD
-      needs: QA
+  PROD:
+        runs-on:  ubuntu-latest
+        environment: PROD
+        needs: QA
 
       
-      steps: 
+        steps: 
       
-       - uses: actions/checkout@v2
+         - uses: actions/checkout@v2
 
-       - name: Run a script
-         run: |
+         - name: Run a script
+           run: |
             echo "I am running a job in the PROD environment"           
 
                              
