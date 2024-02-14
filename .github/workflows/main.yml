@@ -10,7 +10,7 @@ on:
           - BAR
           - FOO
           - REE
-          - Execute .csproj file  
+           
 
 jobs:
   run_selected_option:
@@ -22,19 +22,16 @@ jobs:
       - name: Run selected option (BAR)
         if: ${{ github.event.inputs.dropdown_option == 'BAR' }}
         run: |
-          echo "Hello world!"
+         dotnet build StudentManagementSystem.csproj  # Example command to build the .csproj file
 
       - name: Run selected option (FOO)
         if: ${{ github.event.inputs.dropdown_option == 'FOO' }}
         run: |
-          echo "I did the thing!"
+         dotnet build StudentManagementSystem.csproj  # Example command to build the .csproj file
 
       - name: Run selected option (REE)
         if: ${{ github.event.inputs.dropdown_option == 'REE' }}
         run: |
-          echo "This is the thing!"
+         dotnet build StudentManagementSystem.csproj  # Example command to build the .csproj file
 
-      - name: Run selected option (.csproj file)
-        if: ${{ github.event.inputs.dropdown_option == 'Execute .csproj file' }}
-        run: |
-          dotnet build StudentManagementSystem.csproj  # Example command to build the .csproj file
+     
