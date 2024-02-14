@@ -3,18 +3,14 @@ name: Run Selected Option
 on:
   workflow_dispatch:
     inputs:
-       dropdown_option:
+      dropdown_option:
         type: choice
-        description: select the environment
+        description: Select the Environment
         options:
-        - BAR
-        - FOO
-        - REE
-
-    
-
-
-
+          - BAR
+          - FOO
+          - REE
+          - Execute .csproj file  
 
 jobs:
   run_selected_option:
@@ -23,18 +19,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run selected option
+      - name: Run selected option (BAR)
         if: ${{ github.event.inputs.dropdown_option == 'BAR' }}
         run: |
-          echo "hello world!"
+          echo "Hello world!"
 
-      - name: Run selected option
+      - name: Run selected option (FOO)
         if: ${{ github.event.inputs.dropdown_option == 'FOO' }}
         run: |
           echo "I did the thing!"
 
-      - name: Run selected option
+      - name: Run selected option (REE)
         if: ${{ github.event.inputs.dropdown_option == 'REE' }}
         run: |
           echo "This is the thing!"
 
+      - name: Run selected option (.csproj file)
+        if: ${{ github.event.inputs.dropdown_option == 'Execute .csproj file' }}
+        run: |
+          dotnet build StudentManagementSystem.csproj  # Example command to build the .csproj file
