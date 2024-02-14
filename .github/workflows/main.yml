@@ -22,16 +22,16 @@ jobs:
       - name: Run selected option (BAR)
         if: ${{ github.event.inputs.dropdown_option == 'BAR' }}
         run: |
-         dotnet build StudentManagementSystem.csproj  # Example command to build the .csproj file
+         dotnet build StudentManagementSystem.csproj  
 
       - name: Run selected option (FOO)
         if: ${{ github.event.inputs.dropdown_option == 'FOO' }}
         run: |
-         dotnet build StudentManagementSystem.csproj  # Example command to build the .csproj file
+         dotnet build StudentManagementSystem.csproj  
 
       - name: Run selected option (REE)
         if: ${{ github.event.inputs.dropdown_option == 'REE' }}
         run: |
-         dotnet build StudentManagementSystem.csproj  # Example command to build the .csproj file
+         dotnet build StudentManagementSystem.csproj  
 
      
