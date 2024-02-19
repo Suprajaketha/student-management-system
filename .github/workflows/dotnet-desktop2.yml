@@ -1,0 +1,19 @@
+name: Copy Files
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  copy_files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Copy files
+        run: |
+          mkdir -p https://github.com/Suprajaketha/student-management-system/blob/master/.gitignore
+          cp -r C:\Users\Suparaja\Desktop\self-hosted runner/*https://github.com/Suprajaketha/student-management-system/blob/master/.gitignore
