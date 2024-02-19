@@ -3,17 +3,25 @@ name: Copy Files
 on:
   push:
     branches:
-      - main
+      - main  # Adjust this to the branch you want to trigger the action on
 
 jobs:
   copy_files:
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted 
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Copy files
-        run: |
-          mkdir -p https://github.com/Suprajaketha/student-management-system/blob/master/.gitignore
-          cp -r C:\Users\Suparaja\Desktop\self-hosted runner/*https://github.com/Suprajaketha/student-management-system/blob/master/.gitignore
+    - name: Copy files
+      run: |
+        mkdir -p C:\Users\Suparaja\Documents\Backup
+        cp -r  C:\Users\Suparaja\Documents\Test01/* C:\Users\Suparaja\Documents\Backup
+        
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Copy files"
+        git push
