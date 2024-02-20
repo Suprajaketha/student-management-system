@@ -8,7 +8,7 @@ on:
       - '40_copy_file.bat'  # Path to your batch script file relative to the repository root
   pull_request:
     paths:
-      - '40_copy_file.bat'  # Also monitor changes in pull requests
+      - '40_copy_file.bat'  
 
 jobs:
   copy-files:
