@@ -3,16 +3,18 @@ on:
   workflow_dispatch:
   
 
+
+
   push:
     paths:
-      - '40_copy_file.bat'  
+      - '40_copy_file.bat'  # Path to your batch script file relative to the repository root
   pull_request:
     paths:
-      - '40_copy_file.bat'  
+      - '40_copy_file.bat'  # Also monitor changes in pull requests
 
 jobs:
   copy-files:
-    runs-on: self-hosted
+    runs-on: self-hosted  # Use the self-hosted runner
 
     steps:
       - name: Checkout repository
@@ -21,3 +23,5 @@ jobs:
       - name: Run batch script
         run: |
           ./40_copy_file.bat
+
+ 
