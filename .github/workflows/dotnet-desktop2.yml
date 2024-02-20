@@ -1,7 +1,6 @@
 name: Copy Files
 
 on:
-  workflow_dispatch:
   push:
     paths:
       - '40_copy_file.bat'  # Path to your batch script file relative to the repository root
@@ -12,12 +11,11 @@ on:
 jobs:
   copy-files:
     runs-on: self-hosted
-
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Run batch script
         run: |
-          cd $GITHUB_WORKSPACE
-          call 40_copy_file.bat
+          ./path/to/batch/script/40_copy_file.bat
