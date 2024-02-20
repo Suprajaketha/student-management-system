@@ -3,7 +3,7 @@ name: Copy Files
 on:
   push:
     branches:
-      - main  # Adjust this to the branch you want to trigger the action on
+      - main 
 
 jobs:
   copy_files:
