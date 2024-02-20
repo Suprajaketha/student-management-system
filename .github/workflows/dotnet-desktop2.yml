@@ -2,26 +2,21 @@ name: Copy Files
 
 on:
   push:
-    branches:
-      - main 
+    paths:
+      - '40_copy_file.bat'  # Path to your batch script file relative to the repository root
+  pull_request:
+    paths:
+      - '40_copy_file.bat'  # Also monitor changes in pull requests
 
 jobs:
-  copy_files:
-    runs-on: self-hosted 
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+  copy-files:
+    runs-on: self-hosted
 
-    - name: Copy files
-      run: |
-        mkdir -p C:\Users\Suparaja\Documents\Backup
-        cp -r  C:\Users\Suparaja\Documents\Test01/* C:\Users\Suparaja\Documents\Backup
-        
-    - name: Commit and push changes
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add .
-        git commit -m "Copy files"
-        git push
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run batch script
+        run: |
+          cd $GITHUB_WORKSPACE
+          call 40_copy_file.bat
