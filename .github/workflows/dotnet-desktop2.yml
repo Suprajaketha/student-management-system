@@ -5,7 +5,7 @@ on:
 
   push:
     paths:
-      - '40_copy_file.bat'  # Path to your batch script file relative to the repository root
+      - '40_copy_file.bat'  
   pull_request:
     paths:
       - '40_copy_file.bat'  
