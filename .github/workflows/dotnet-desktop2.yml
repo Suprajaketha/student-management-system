@@ -19,4 +19,5 @@ jobs:
 
       - name: Run batch script
         run: |
-          ./path/to/batch/script/40_copy_file.bat
+          ./40_copy_file.bat
+         
