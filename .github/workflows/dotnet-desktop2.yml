@@ -1,10 +1,6 @@
 name: Copy Files
 on:
-  workflow_dispatch:
-  
-
-
-
+  workflow_dispatch: 
   push:
     paths:
       - '40_copy_file.bat'  # Path to your batch script file relative to the repository root
