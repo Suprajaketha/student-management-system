@@ -17,13 +17,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Create backup folder
+      - name: Check if backup folder exists
         run: |
-          mkdir -p 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
-          cp -r * 'C:\Users\Suparaja\Desktop\Batch script\Backup1'  # Copy all files to the backup folder
+          if not exist 'C:\Users\Suparaja\Desktop\Batch script\Backup1' (
+            mkdir 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
+          )
+
+      - name: Create backup
+        run: |
+          xcopy /s /e /i * 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
 
       - name: Run batch script
         run: |
           ./40_copy_file.bat
 
- 
