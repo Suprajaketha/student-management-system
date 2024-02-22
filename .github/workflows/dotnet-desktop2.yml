@@ -19,9 +19,9 @@ jobs:
 
       - name: Check if backup folder exists
         run: |
-          if not exist 'C:\Users\Suparaja\Desktop\Batch script\Backup1' (
-            mkdir 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
-          )
+          if (!(Test-Path 'C:\Users\Suparaja\Desktop\Batch script\Backup1')) {
+            New-Item -ItemType Directory -Path 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
+          }
 
       - name: Create backup
         run: |
@@ -30,4 +30,3 @@ jobs:
       - name: Run batch script
         run: |
           ./40_copy_file.bat
-
