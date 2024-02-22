@@ -25,4 +25,4 @@ echo Files copied successfully.
 rem Zip the backup folder using .NET Framework classes
 powershell -Command "Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory('%backup_folder%', '%zip_file%')"
 
-echo Backup created and zipped successfully.
+echo Backup created and zipped successfully
