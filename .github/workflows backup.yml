@@ -1,6 +1,7 @@
 name: Backup Before Deploy
 
 on:
+  workflow-dispatch:
   push:
     branches:
       - master
