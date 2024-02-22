@@ -1,5 +1,5 @@
 @echo off
-set source_folder=Test01
+set source_folder=C:\Users\Suparaja\Documents\Test01
 set backup_folder=Backup1
 set zip_file=backup.zip
 
@@ -20,9 +20,9 @@ echo Copying files from source folder to backup folder...
 rem Copy all files from source folder to backup folder
 xcopy /s /e /i "%source_folder%\*" "%backup_folder%"
 
-echo Files copied successfully
+echo Files copied successfully.
 
 rem Zip the backup folder using .NET Framework classes
 powershell -Command "Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory('%backup_folder%', '%zip_file%')"
 
-echo Backup created and zipped successfully
+echo Backup created and zipped successfully.
