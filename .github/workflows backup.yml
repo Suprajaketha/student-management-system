@@ -1,0 +1,31 @@
+name: Backup Before Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  backup:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run Backup Script
+        run: |
+          cd ${{ github.workspace }}
+          ./Backup1.bat
+
+      - name: Archive Backup
+        uses: actions/upload-artifact@v2
+        with:
+          name: backup
+          path: Backup1  
+
+
+
+ 
+     
+      
