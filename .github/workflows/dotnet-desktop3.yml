@@ -16,7 +16,8 @@ jobs:
 
       - name: Run Backup Script
         run: |
-          cd ${{ github.workspace }}
-          backup1.bat
+         cd ${{ github.workspace }}
+         ./Backup1.bat
+
 
       # You can add additional steps for deployment here
