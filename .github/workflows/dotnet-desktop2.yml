@@ -1,20 +1,26 @@
-name: Copy Files
+name: Copy Files and Backup
+
 on:
   workflow_dispatch: 
   push:
     paths:
-      - '40_copy_file.bat'  # Path to your batch script file relative to the repository root
+      - '40_copy_file.bat'  
   pull_request:
     paths:
-      - '40_copy_file.bat'  # Also monitor changes in pull requests
+      - '40_copy_file.bat'  
 
 jobs:
-  copy-files:
-    runs-on: self-hosted  # Use the self-hosted runner
+  copy-files-and-backup:
+    runs-on: self-hosted  
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Create backup folder
+        run: |
+          mkdir -p 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
+          cp -r * 'C:\Users\Suparaja\Desktop\Batch script\Backup1'  # Copy all files to the backup folder
 
       - name: Run batch script
         run: |
