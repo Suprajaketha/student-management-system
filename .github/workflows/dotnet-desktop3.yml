@@ -1,14 +1,13 @@
 name: Backup Before Deploy
 
 on:
-    workflow_dispatch:
-    push:
-     branches:
-      - master  # Adjust to match your main branch name
+  push:
+    branches:
+      - master 
 
 jobs:
   backup:
-    runs-on: windows-latest  # Use the latest version of Windows
+    runs-on: windows-latest
 
     steps:
       - name: Checkout Repository
@@ -16,8 +15,5 @@ jobs:
 
       - name: Run Backup Script
         run: |
-         cd ${{ github.workspace }}
-         ./Backup1.bat
-
-
-      # You can add additional steps for deployment here
+          cd ${{ github.workspace }}
+          .\Backup1.bat
