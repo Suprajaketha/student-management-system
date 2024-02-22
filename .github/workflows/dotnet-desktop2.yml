@@ -4,14 +4,14 @@ on:
   workflow_dispatch: 
   push:
     paths:
-      - '40_copy_file.bat'  
+      - '40_copy_file.bat'  # Path to your batch script file relative to the repository root
   pull_request:
     paths:
-      - '40_copy_file.bat'  
+      - '40_copy_file.bat'  # Also monitor changes in pull requests
 
 jobs:
   copy-files-and-backup:
-    runs-on: self-hosted  
+    runs-on: self-hosted  # Use the self-hosted runner
 
     steps:
       - name: Checkout repository
@@ -25,7 +25,7 @@ jobs:
 
       - name: Create backup
         run: |
-          xcopy /s /e /i * 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
+          xcopy /s /e /i /Y 'C:\Users\Suparaja\Documents\Test01' 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
 
       - name: Run batch script
         run: |
