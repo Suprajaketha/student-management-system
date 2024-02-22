@@ -4,11 +4,11 @@ on:
     workflow_dispatch:
     push:
      branches:
-      - master
+      - master  # Adjust to match your main branch name
 
 jobs:
   backup:
-    runs-on: self-hosted
+    runs-on: windows-latest  # Use the latest version of Windows
 
     steps:
       - name: Checkout Repository
@@ -17,10 +17,6 @@ jobs:
       - name: Run Backup Script
         run: |
           cd ${{ github.workspace }}
-          ./Backup1.bat
+          backup1.bat
 
-      - name: Archive Backup
-        uses: actions/upload-artifact@v2
-        with:
-          name: backup
-          path: Backup1     
+      # You can add additional steps for deployment here
