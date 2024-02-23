@@ -17,11 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Check if backup folder exists
-        run: |
-          if (!(Test-Path 'C:\Users\Suparaja\Desktop\Batch script\Backup1')) {
-            New-Item -ItemType Directory -Path 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
-          }
+     
       
       - name: Compress files into individual zip files
         run: |
