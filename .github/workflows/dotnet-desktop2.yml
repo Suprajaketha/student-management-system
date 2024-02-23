@@ -4,15 +4,15 @@ on:
   workflow_dispatch: 
   push:
     paths:
-      - '40_copy_file.bat' 
+      - '40_copy_file.bat'  
   pull_request:
     paths:
       - '40_copy_file.bat' 
-
+      
 jobs:
   copy-files-and-backup:
-    runs-on: self-hosted  
-
+    runs-on: self-hosted 
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -23,14 +23,12 @@ jobs:
             New-Item -ItemType Directory -Path 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
           }
       
-      - name: Copy files to backup folder
+      - name: Compress files into individual zip files
         run: |
           Get-ChildItem 'C:\Users\Suparaja\Documents\Test01' | ForEach-Object {
-            Copy-Item $_.FullName -Destination 'C:\Users\Suparaja\Desktop\Batch script\Backup1' -Recurse -Force
+            $zipFileName = $_.Name + '.zip'
+            Compress-Archive -Path $_.FullName -DestinationPath "C:\Users\Suparaja\Desktop\Batch script\Backup1\$zipFileName"
           }
-
-      - name: Compress backup files
-        run: Compress-Archive -Path 'C:\Users\Suparaja\Desktop\Batch script\Backup1' -DestinationPath 'C:\Users\Suparaja\Desktop\Batch script\Backup1.zip' -Update
 
       - name: Run batch script
         run: |
