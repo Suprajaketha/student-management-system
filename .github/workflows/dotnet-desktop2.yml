@@ -17,7 +17,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-     
+      - name: Check if backup folder exists
+        run: |
+          if (!(Test-Path 'C:\Users\Suparaja\Desktop\Batch script\Backup1')) {
+            New-Item -ItemType Directory -Path 'C:\Users\Suparaja\Desktop\Batch script\Backup1'
+          }
       
       - name: Compress files into individual zip files
         run: |
@@ -25,7 +29,7 @@ jobs:
             $zipFileName = $_.Name + '.zip'
             Compress-Archive -Path $_.FullName -DestinationPath "C:\Users\Suparaja\Desktop\Batch script\Backup1\$zipFileName"
           }
-
       - name: Run batch script
         run: |
           ./40_copy_file.bat
+
