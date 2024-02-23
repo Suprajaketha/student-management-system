@@ -30,7 +30,7 @@ jobs:
           }
 
       - name: Compress backup files
-        run: Compress-Archive -Path 'C:\Users\Suparaja\Desktop\Batch script\Backup1' -DestinationPath 'C:\Users\Suparaja\Desktop\Batch script\Backup1.zip'
+        run: Compress-Archive -Path 'C:\Users\Suparaja\Desktop\Batch script\Backup1' -DestinationPath 'C:\Users\Suparaja\Desktop\Batch script\Backup1.zip' -Update
 
       - name: Run batch script
         run: |
