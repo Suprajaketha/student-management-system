@@ -34,6 +34,5 @@ jobs:
         run: |
          dotnet build StudentManagementSystem.csproj  
 
-        git commit -m "Copy files"
-        git push
+       
      
