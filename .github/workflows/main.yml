@@ -33,23 +33,7 @@ jobs:
         if: ${{ github.event.inputs.dropdown_option == 'REE' }}
         run: |
          dotnet build StudentManagementSystem.csproj  
-  copy_files:
-    runs-on: self-hosted 
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
 
-    - name: Copy files
-      run: |
-        mkdir -p C:\Users\Suparaja\Documents\Backup
-        cp -r  C:\Users\Suparaja\Documents\Test01/* C:\Users\Suparaja\Documents\Backup
-        
-    - name: Commit and push changes
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add .
         git commit -m "Copy files"
         git push
      
