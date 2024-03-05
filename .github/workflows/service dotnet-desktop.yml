@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Stop AnyDesk Service
         run: |
-          Stop-Service -Name AnyDesk -ErrorAction SilentlyContinue
+          Stop-Service -Name AnyDesk 
         shell: powershell
 
       - name: Checkout repository
