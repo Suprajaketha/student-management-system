@@ -22,7 +22,7 @@ jobs:
       - name: Run Backup Script
         run: |
           .\Backup1.bat
-      - name: Restart AnyDesk Service
-        run: |
-          Start-Service -Name AnyDesk -ErrorAction SilentlyContinue
-        shell: powershell
+      #- name: Restart AnyDesk Service
+        #run: |
+         # Start-Service -Name AnyDesk -ErrorAction SilentlyContinue
+        #shell: powershell
