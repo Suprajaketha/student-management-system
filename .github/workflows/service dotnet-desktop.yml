@@ -1,28 +1,28 @@
-name: Deployment Workflow
+name: Local Service Management Workflow
 
 on:
-  workflow_dispatch:
   push:
     branches:
-      - master  
-      
+      - main
+
 jobs:
-  deploy:
-    runs-on: windows-latest  # Use a Windows runner to execute batch files
-
+  stop-service-and-build:
+    name: Stop Service and Build
+    runs-on: ubuntu-latest
+    
     steps:
-      - name: Stop AnyDesk Service
-        run: |
-          Stop-Service -Name AnyDesk 
-        shell: powershell
-
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      
-      - name: Run Backup Script
-        run: |
-          .\Backup1.bat
-      #- name: Restart AnyDesk Service
-        #run: |
-         # Start-Service -Name AnyDesk -ErrorAction SilentlyContinue
-        #shell: powershell
+      - name: Stop Service and Build
+        uses: appleboy/ssh-action@master
+        with:
+          host: 192.168.1.177  
+          username: suprajaketha 
+          password: supraja8  
+          script: |
+            # Stop the AnyDesk service
+            taskkill /F /IM AnyDesk.exe
+            
+            # Perform the build process here (e.g., npm install, npm build, etc.)
+            # Example: npm install
+            
+            # Restart the AnyDesk service
+            "C:\Program Files (x86)\AnyDesk\AnyDesk.exe"
