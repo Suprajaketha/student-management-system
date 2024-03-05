@@ -1,6 +1,7 @@
 name: Local Service Management Workflow
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -22,7 +23,8 @@ jobs:
             taskkill /F /IM AnyDesk.exe
             
             # Perform the build process here (e.g., npm install, npm build, etc.)
-            # Example: npm install
+            run:|
+            Backup1.bat
             
             # Restart the AnyDesk service
             "C:\Program Files (x86)\AnyDesk\AnyDesk.exe"
