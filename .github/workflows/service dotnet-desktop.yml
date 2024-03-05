@@ -1,0 +1,27 @@
+name: Deployment Workflow
+
+on:
+  push:
+    branches:
+      - master  
+      
+jobs:
+  deploy:
+    runs-on: windows-latest  # Use a Windows runner to execute batch files
+
+    steps:
+      - name: Stop AnyDesk Service
+        run: |
+          Stop-Service -Name AnyDesk -ErrorAction SilentlyContinue
+        shell: powershell
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Run Backup Script
+        run: |
+          .\Backup1.bat
+      - name: Restart AnyDesk Service
+        run: |
+          Start-Service -Name AnyDesk -ErrorAction SilentlyContinue
+        shell: powershell
