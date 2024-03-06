@@ -1,4 +1,4 @@
-name: Build and Restart AnyDesk Service
+name: AnyDesk Service
 
 on:
   push:
