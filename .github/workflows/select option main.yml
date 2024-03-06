@@ -41,6 +41,6 @@ jobs:
         uses: actions/upload-artifact@v2.2.0
         with:
           name: project-artifacts
-          path: C:\Users\Suparaja\Desktop\student management system\StudentManagementSystem
+          path: https://github.com/Suprajaketha/student-management-system/actions
        
      
