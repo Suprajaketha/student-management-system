@@ -33,15 +33,12 @@ jobs:
         if: ${{ github.event.inputs.dropdown_option == 'REE' }}
         run: |
          dotnet build StudentManagementSystem.csproj 
-         
-      - name: create a temporary artifact download folder
-        run: mkdir downloads
-      - name: add artifacts to publish to the temp folder 
+      - name: publish 
         run: |
-      
-      - name: use the upload artifacts github action
+         dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
+
+      - name: Publish Artifacts
         uses: actions/upload-artifact@v2.2.0
-        with: assets-for-download
-           path: downloads
-       
-     
+        with:
+          name: project-artifacts
+          path: publish_output
