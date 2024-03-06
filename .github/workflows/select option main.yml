@@ -32,11 +32,15 @@ jobs:
       - name: Run selected option (REE)
         if: ${{ github.event.inputs.dropdown_option == 'REE' }}
         run: |
-         dotnet build StudentManagementSystem.csproj  
+         dotnet build StudentManagementSystem.csproj 
+      - name: publish
+        run: |
+         dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
+         
       - name: Publish Artifacts
         uses: actions/upload-artifact@v2.2.0
         with:
           name: project-artifacts
-          path: C:\Users\Suparaja\Desktop\student management system
+          path: C:\Users\Suparaja\Documents\publish_output
        
      
