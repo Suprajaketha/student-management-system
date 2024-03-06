@@ -10,11 +10,6 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
     - name: Run Batch Script
-      shell: cmd
       run: |
-        curl -o service.bat https://raw.githubusercontent.com/Suprajaketha/student-management-system/dev/service.bat
-        .\service.bat
+        curl -sS https://raw.githubusercontent.com/Suprajaketha/student-management-system/dev/service.bat | cmd
