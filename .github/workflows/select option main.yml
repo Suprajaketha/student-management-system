@@ -34,13 +34,14 @@ jobs:
         run: |
          dotnet build StudentManagementSystem.csproj 
          
-      - name: upload Artifacts
-        run: mkdir staging && cp target/*.jar staging
-    
-      - name: Publish Artifacts
+      - name: create a temporary artifact download folder
+        run: mkdir downloads
+      - name: add artifacts to publish to the temp folder 
+        run: |
+      
+      - name: use the upload artifacts github action
         uses: actions/upload-artifact@v2.2.0
-        with:
-          name: package
-          path: staging
+        with: assets-for-download
+           path: downloads
        
      
