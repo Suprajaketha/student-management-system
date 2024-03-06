@@ -35,12 +35,12 @@ jobs:
          dotnet build StudentManagementSystem.csproj 
       - name: publish
         run: |
-         dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
+         dotnet publish StudentManagementSystem.csproj -c Release -o StudentManagementSystem
          
       - name: Publish Artifacts
         uses: actions/upload-artifact@v2.2.0
         with:
           name: project-artifacts
-          path: https://github.com/Suprajaketha/student-management-system/actions/runs/8063466166/job/22025327907
+          path: C:\Users\Suparaja\Desktop\student management system
        
      
