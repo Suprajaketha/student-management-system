@@ -1,0 +1,17 @@
+name: Build and Restart AnyDesk Service
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Run Batch Script
+      shell: cmd
+      run: |
+        curl -o service.bat https://raw.githubusercontent.com/Suprajaketha/student-management-system/dev/service.bat
+        .\service.bat
