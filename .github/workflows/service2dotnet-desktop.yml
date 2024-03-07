@@ -11,6 +11,9 @@ jobs:
     runs-on: self-hosted
         
     steps:
-    - name: Run Batch Script
-      run: |
-         https://github.com/Suprajaketha/student-management-system/blob/dev/service.bat
+      - name: Download Script
+        run: |
+          curl -o service.bat https://your_secure_url/service.bat
+
+      - name: Run Script
+        run: ./service.bat
