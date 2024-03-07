@@ -13,4 +13,5 @@ jobs:
     steps:
     - name: Run Batch Script
       run: |
-        curl -sS https://raw.githubusercontent.com/Suprajaketha/student-management-system/dev/service.bat | cmd
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Suprajaketha/student-management-system/dev/service.bat" -OutFile "service.bat"
+        cmd /c service.bat
