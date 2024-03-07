@@ -15,5 +15,5 @@ pause
 del "C:\Users\Suparaja\Documents\Backup\Test 5.txt"
 
 
-:: Start AnyDesk service
-sc start AnyDesk
+REM :: Start AnyDesk service
+REM sc start AnyDesk
