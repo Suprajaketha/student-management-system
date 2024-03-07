@@ -13,7 +13,6 @@ jobs:
     steps:
       - name: Download Script
         run: |
-          curl -o service.bat https://your_secure_url/service.bat
-
+          curl -o service.bat "C:\Users\Suparaja\Desktop\Batch script\service.bat"
       - name: Run Script
         run: ./service.bat
