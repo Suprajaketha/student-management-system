@@ -13,4 +13,4 @@ jobs:
     steps:
     - name: Run Batch Script
       run: |
-         service.bat
+         https://github.com/Suprajaketha/student-management-system/blob/dev/service.bat
