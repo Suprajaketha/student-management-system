@@ -9,8 +9,7 @@ on:
 jobs:
   build:
     runs-on: self-hosted
-    
-    
+        
     steps:
     - name: Run Batch Script
       run: |
