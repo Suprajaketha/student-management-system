@@ -27,22 +27,20 @@ jobs:
         id: check_folder
         run: |
           if [ -d "project-artifacts" ]; then
-            echo "Folder exists"
-            echo "::set-output name=folder_exists::true"
+            echo "::set-env name=FOLDER_EXISTS::true"
           else
-            echo "Folder does not exist"
-            echo "::set-output name=folder_exists::false"
+            echo "::set-env name=FOLDER_EXISTS::false"
           fi
 
       - name: Publish Artifacts
-        if: steps.check_folder.outputs.folder_exists == 'true'
+        if: env.FOLDER_EXISTS == 'true'
         uses: actions/upload-artifact@v2.2.0
         with:
           name: project-artifacts
           path: publish_output
 
       - name: Publish Artifacts without folder
-        if: steps.check_folder.outputs.folder_exists == 'false'
+        if: env.FOLDER_EXISTS == 'false'
         uses: actions/upload-artifact@v2.2.0
         with:
           name: project-artifacts
