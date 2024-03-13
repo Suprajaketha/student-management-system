@@ -27,9 +27,9 @@ jobs:
         id: check_folder
         run: |
           if [ -d "project-artifacts" ]; then
-            echo "::set-env name=FOLDER_EXISTS::true"
+            echo "FOLDER_EXISTS=true" > $GITHUB_ENV
           else
-            echo "::set-env name=FOLDER_EXISTS::false"
+            echo "FOLDER_EXISTS=false" > $GITHUB_ENV
           fi
 
       - name: Publish Artifacts
