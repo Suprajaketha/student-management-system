@@ -45,3 +45,11 @@ jobs:
         with:
           name: project-artifacts
           path: publish_output
+
+      # Download artifacts to local directory
+      - name: Download Artifacts
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/download-artifact@v2
+        with:
+          name: project-artifacts
+          path: ${{ github.workspace }}/my_artifacts
