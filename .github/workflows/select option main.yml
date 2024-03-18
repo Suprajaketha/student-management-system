@@ -28,6 +28,11 @@ jobs:
       - name: List contents of publish_output
         run: ls -l publish_output
 
+      # Determine if the folder exists and create if not
+      - name: Create artifacts directory
+        run: |
+          mkdir -p C:/Users/Suparaja/Desktop/my_artifacts
+
       # Determine if the folder exists and set environment variable
       - name: Check if folder exists
         id: check_folder
@@ -46,10 +51,9 @@ jobs:
           name: project-artifacts
           path: publish_output
 
-      # Download artifacts to specified local directory
-      - name: Download Artifacts
+      # Move artifacts to specified local directory
+      - name: Move Artifacts to Local Directory
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/download-artifact@v2
-        with:
-          name: project-artifacts
-          path: C:\Users\Suparaja\Desktop\my_artifacts
+        run: mv publish_output/* C:/Users/Suparaja/Desktop/my_artifacts
+
+
