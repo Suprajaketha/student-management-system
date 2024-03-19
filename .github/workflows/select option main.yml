@@ -1,27 +1,36 @@
-name: Upload Artifacts
+name: Download Artifacts
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      dropdown_option:
+        type: choice
+        description: Select the Environment
+        options:
+          - BAR
+          - FOO
+          - REE
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  download_artifacts:
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Build and publish the project
-      - name: Build and publish
+      # Check if folder exists to download artifacts
+      - name: Check if folder exists
         run: |
-          dotnet build StudentManagementSystem.csproj
-          dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
+          if [ -d "my_artifacts" ]; then
+            echo "Folder 'my_artifacts' exists."
+          else
+            echo "Folder 'my_artifacts' does not exist. Creating folder..."
+            mkdir -p my_artifacts
+          fi
 
-      # Publish artifacts
-      - name: Publish Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: project-artifacts
-          path: publish_output
+      # Download artifacts to the specified folder
+      - name: Download Artifacts
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "Downloading artifacts to folder 'my_artifacts'..."
+          
