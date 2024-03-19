@@ -18,19 +18,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Check if folder exists to download artifacts and create if not
-      - name: Check and create artifacts folder
+      # Create a folder with timestamp for artifacts
+      - name: Create artifacts folder
         run: |
-          if (-Not (Test-Path -Path "my_artifacts" -PathType Container)) {
-            Write-Output "Folder 'my_artifacts' does not exist. Creating folder..."
-            New-Item -ItemType Directory -Path "my_artifacts"
-          } else {
-            Write-Output "Folder 'my_artifacts' exists."
-          }
+          mkdir -p my_artifacts/$(date +'%Y-%m-%d_%H-%M-%S')
+          echo "Created artifacts folder with name: $(date +'%Y-%m-%d_%H-%M-%S')"
 
       # Download artifacts to the specified folder
       - name: Download Artifacts
         if: github.event_name == 'workflow_dispatch'
         run: |
-          Write-Output "Downloading artifacts to folder 'my_artifacts'..."
-          
+          echo "Downloading artifacts to folder..."
+         
