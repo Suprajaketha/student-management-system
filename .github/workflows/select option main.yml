@@ -28,13 +28,15 @@ jobs:
       - name: List contents of publish_output
         run: dir publish_output  # Use dir for Windows
 
-      # Create "myartifacts" folder (if it doesn't exist)
+      # Create "myartifacts" folder (if not exists)
       - name: Create Artifacts Folder (if not exists)
         run: |
-          if (Test-Path "C:\Users\Suparaja\Desktop\myartifacts") {
-            Write-Host "myartifacts folder already exists."
+          $folderPath = "C:\Users\Suparaja\Desktop\myartifacts"
+          if (-not (Test-Path $folderPath)) {
+            New-Item -ItemType Directory -Path $folderPath
+            Write-Host "myartifacts folder created successfully."
           } else {
-            New-Item -ItemType Directory -Path "C:\Users\Suparaja\Desktop\myartifacts"
+            Write-Host "myartifacts folder already exists."
           }
 
       # Move published artifacts to the specified path
