@@ -1,26 +1,31 @@
 name: Run Selected Option
-on:  workflow_dispatch:    
-  inputs:      
-    dropdown_option:        
-      type: choice        
-      description: Select the Environment        
-      options:          
-        - BAR          
-        - FOO          
-        - REE
-jobs:  
-  run_selected_option:    
-    runs-on: windows-latest  # Change to windows-latest
-    steps:      
-      - name: Checkout repository        
+
+on:
+  workflow_dispatch:
+    inputs:
+      dropdown_option:
+        type: choice
+        description: Select the Environment
+        options:
+          - BAR
+          - FOO
+          - REE
+
+jobs:
+  run_selected_option:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
         uses: actions/checkout@v2
-      # Build and publish the project      
-      - name: Build and publish        
-        run: |          
-          dotnet build StudentManagementSystem.csproj          
-          dotnet publish StudentManagementSystem.csproj -c Release -o publish_output      
-      # List contents of publish_output directory      
-      - name: List contents of publish_output        
+
+      # Build and publish the project
+      - name: Build and publish
+        run: |
+          dotnet build StudentManagementSystem.csproj
+          dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
+      
+      # List contents of publish_output directory
+      - name: List contents of publish_output
         run: dir publish_output  # Use dir for Windows
 
       # Download artifacts from previous jobs (if any)
@@ -36,6 +41,5 @@ jobs:
       # Move published artifacts to the unique folder
       - name: Move Artifacts to Unique Folder
         run: |
+          $currentTime = Get-Date -Format "yyyyMMdd-HHmmss"
           Move-Item -Path publish_output\* -Destination "publish_output_$currentTime\"
-
-     
