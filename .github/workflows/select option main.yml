@@ -13,7 +13,7 @@ on:
 
 jobs:
   run_selected_option:
-    runs-on: self-hosted
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -23,23 +23,21 @@ jobs:
         run: |
           dotnet build StudentManagementSystem.csproj
           dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
-      
+
       # List contents of publish_output directory
       - name: List contents of publish_output
         run: dir publish_output  # Use dir for Windows
 
-      # Download artifacts from previous jobs (if any)
-      - name: Download Artifacts (optional)
-        uses: actions/download-artifact@v2
-
-      # Create a unique folder with timestamp for downloaded artifacts
-      - name: Create Unique Folder
+      # Create a folder named "artifacts" (if it doesn't exist)
+      - name: Create Artifacts Folder (if not exists)
         run: |
-          $currentTime = Get-Date -Format "yyyyMMdd-HHmmss"
-          New-Item -ItemType Directory -Path "publish_output_$currentTime"  
+          if (Test-Path "artifacts") {
+            Write-Host "Artifacts folder already exists."
+          } else {
+            New-Item -ItemType Directory -Path "artifacts"
+          }
 
-      # Move published artifacts to the unique folder
-      - name: Move Artifacts to Unique Folder
+      # Move published artifacts to the "artifacts" folder
+      - name: Move Artifacts to Folder
         run: |
-          $currentTime = Get-Date -Format "yyyyMMdd-HHmmss"
-          Move-Item -Path publish_output\* -Destination "publish_output_$currentTime\"
+          Move-Item -Path publish_output\* -Destination "artifacts\"
