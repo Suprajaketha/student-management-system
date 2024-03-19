@@ -46,5 +46,5 @@ jobs:
           echo "Created artifacts folder with name: $(date +'%Y-%m-%d_%H-%M-%S')"
           ls -l my_artifacts
           echo "Downloading artifacts to folder..."
-          curl -L -o my_artifacts/artifacts.zip ${{ steps.create_folder.outputs.stdout }}
+          curl -L -o my_artifacts/artifacts.zip ${{ github.event.workflow_run.artifacts_url }}
           unzip my_artifacts/artifacts.zip -d my_artifacts
