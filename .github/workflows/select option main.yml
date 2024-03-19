@@ -18,14 +18,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Check if folder exists to download artifacts
-      - name: Check if folder exists
+      # Check if folder exists to download artifacts and create if not
+      - name: Check and create artifacts folder
         run: |
-          if [ -d "my_artifacts" ]; then
-            echo "Folder 'my_artifacts' exists."
-          else
+          if [ ! -d "my_artifacts" ]; then
             echo "Folder 'my_artifacts' does not exist. Creating folder..."
             mkdir -p my_artifacts
+          else
+            echo "Folder 'my_artifacts' exists."
           fi
 
       # Download artifacts to the specified folder
