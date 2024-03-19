@@ -18,33 +18,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Build and publish the project
-      - name: Build and publish
-        run: |
-          dotnet build StudentManagementSystem.csproj
-          dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
-
-      # Create a folder with a dynamically generated name
+      # Create a folder to save artifacts
       - name: Create artifacts folder
-        id: create_folder
-        run: |
-          mkdir -p my_artifacts/$(date +'%Y-%m-%d_%H-%M-%S')
-          echo "Created artifacts folder with name: $(date +'%Y-%m-%d_%H-%M-%S')"
+        run: mkdir -p my_artifacts
 
-      # Publish artifacts if folder exists
-      - name: Publish Artifacts
-        uses: actions/upload-artifact@v2.2.0
-        with:
-          name: project-artifacts
-          path: publish_output
-
-      # Download artifacts to dynamically created folder
+      # Download artifacts to the specified folder
       - name: Download Artifacts
         if: github.event_name == 'workflow_dispatch'
         run: |
-          mkdir -p my_artifacts/$(date +'%Y-%m-%d_%H-%M-%S')
-          echo "Created artifacts folder with name: $(date +'%Y-%m-%d_%H-%M-%S')"
-          ls -l my_artifacts
+          mkdir -p my_artifacts
           echo "Downloading artifacts to folder..."
           curl -L -o my_artifacts/artifacts.zip ${{ github.event.workflow_run.artifacts_url }}
           unzip my_artifacts/artifacts.zip -d my_artifacts
