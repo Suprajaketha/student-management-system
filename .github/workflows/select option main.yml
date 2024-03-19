@@ -21,16 +21,16 @@ jobs:
       # Check if folder exists to download artifacts and create if not
       - name: Check and create artifacts folder
         run: |
-          if [ ! -d "my_artifacts" ]; then
-            echo "Folder 'my_artifacts' does not exist. Creating folder..."
-            mkdir -p my_artifacts
-          else
-            echo "Folder 'my_artifacts' exists."
-          fi
+          if (-Not (Test-Path -Path "my_artifacts" -PathType Container)) {
+            Write-Output "Folder 'my_artifacts' does not exist. Creating folder..."
+            New-Item -ItemType Directory -Path "my_artifacts"
+          } else {
+            Write-Output "Folder 'my_artifacts' exists."
+          }
 
       # Download artifacts to the specified folder
       - name: Download Artifacts
         if: github.event_name == 'workflow_dispatch'
         run: |
-          echo "Downloading artifacts to folder 'my_artifacts'..."
+          Write-Output "Downloading artifacts to folder 'my_artifacts'..."
           
