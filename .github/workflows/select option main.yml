@@ -23,16 +23,9 @@ jobs:
         run: |
           dotnet build StudentManagementSystem.csproj
           dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
-
       # List contents of publish_output directory
       - name: List contents of publish_output
         run: ls -l publish_output
-
-      # Manual steps for saving artifacts to local
-      - name: Manual Step - Save Artifacts to Local
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          echo "Manually save artifacts to C:\Users\Suparaja\Desktop\my_artifacts"
 
       # Determine if the folder exists and set environment variable
       - name: Check if folder exists
@@ -51,3 +44,11 @@ jobs:
         with:
           name: project-artifacts
           path: publish_output
+
+      # Download artifacts to specified local directory
+      - name: Download Artifacts
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/download-artifact@v2
+        with:
+          name: project-artifacts
+          path: C:\Users\Suparaja\Desktop\my_artifacts
