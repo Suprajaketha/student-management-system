@@ -18,11 +18,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Create a folder with timestamp for artifacts
+      # Create a folder to save artifacts if it doesn't exist
       - name: Create artifacts folder
         run: |
-          mkdir -p my_artifacts/$(date +'%Y-%m-%d_%H-%M-%S')
-          echo "Created artifacts folder with name: $(date +'%Y-%m-%d_%H-%M-%S')"
+          if [ ! -d "my_artifacts" ]; then
+            mkdir -p my_artifacts
+          else
+            echo "Folder 'my_artifacts' already exists."
+          fi
 
       # Download artifacts to the specified folder
       - name: Download Artifacts
