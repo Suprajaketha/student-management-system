@@ -1,31 +1,27 @@
-name: Download Artifacts
+name: Upload Artifacts
 
 on:
-  workflow_dispatch:
-    inputs:
-      dropdown_option:
-        type: choice
-        description: Select the Environment
-        options:
-          - BAR
-          - FOO
-          - REE
+  push:
+    branches:
+      - main
 
 jobs:
-  download_artifacts:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Create a folder to save artifacts
-      - name: Create artifacts folder
-        run: mkdir -p my_artifacts
+      # Build and publish the project
+      - name: Build and publish
+        run: |
+          dotnet build StudentManagementSystem.csproj
+          dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
 
-      # Download artifacts to the specified folder
-      - name: Download Artifacts
-        if: github.event_name == 'workflow_dispatch'
-        uses: actions/download-artifact@v2
+      # Publish artifacts
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v2
         with:
           name: project-artifacts
-          path: my_artifacts
+          path: publish_output
