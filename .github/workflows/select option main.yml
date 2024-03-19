@@ -25,7 +25,7 @@ jobs:
       # Download artifacts to the specified folder
       - name: Download Artifacts
         if: github.event_name == 'workflow_dispatch'
-        run: |
-          echo "Downloading artifacts to folder..."
-          curl -L -o my_artifacts/artifacts.zip ${{ github.event.workflow_run.artifacts_url }}
-          unzip my_artifacts/artifacts.zip -d my_artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: project-artifacts
+          path: my_artifacts
