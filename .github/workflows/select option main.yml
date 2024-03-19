@@ -1,30 +1,41 @@
-name: Download Artifacts
-
-on:
-  workflow_dispatch:
-    inputs:
-      dropdown_option:
-        type: choice
-        description: Select the Environment
-        options:
-          - BAR
-          - FOO
-          - REE
-
-jobs:
-  download_artifacts:
-    runs-on: self-hosted
-    steps:
-      - name: Checkout repository
+name: Run Selected Option
+on:  workflow_dispatch:    
+  inputs:      
+    dropdown_option:        
+      type: choice        
+      description: Select the Environment        
+      options:          
+        - BAR          
+        - FOO          
+        - REE
+jobs:  
+  run_selected_option:    
+    runs-on: windows-latest  # Change to windows-latest
+    steps:      
+      - name: Checkout repository        
         uses: actions/checkout@v2
+      # Build and publish the project      
+      - name: Build and publish        
+        run: |          
+          dotnet build StudentManagementSystem.csproj          
+          dotnet publish StudentManagementSystem.csproj -c Release -o publish_output      
+      # List contents of publish_output directory      
+      - name: List contents of publish_output        
+        run: dir publish_output  # Use dir for Windows
 
-      # Create a folder to save artifacts
-      - name: Create artifacts folder
-        run: New-Item -ItemType Directory -Path "C:\Users\Supraja\my_artifacts"
+      # Download artifacts from previous jobs (if any)
+      - name: Download Artifacts (optional)
+        uses: actions/download-artifact@v2
 
-      # Download artifacts to the specified folder
-      - name: Download Artifacts
-        if: github.event_name == 'workflow_dispatch'
+      # Create a unique folder with timestamp for downloaded artifacts
+      - name: Create Unique Folder
         run: |
-          Write-Output "Downloading artifacts to folder..."
-          
+          $currentTime = Get-Date -Format "yyyyMMdd-HHmmss"
+          New-Item -ItemType Directory -Path "publish_output_$currentTime"  
+
+      # Move published artifacts to the unique folder
+      - name: Move Artifacts to Unique Folder
+        run: |
+          Move-Item -Path publish_output\* -Destination "publish_output_$currentTime\"
+
+     
