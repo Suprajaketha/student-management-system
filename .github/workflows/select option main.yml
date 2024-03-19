@@ -23,12 +23,13 @@ jobs:
         run: |
           dotnet build StudentManagementSystem.csproj
           dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
-          
+
       # Create a folder with a dynamically generated name
       - name: Create artifacts folder
         id: create_folder
         run: |
           mkdir -p my_artifacts/$(date +'%Y-%m-%d_%H-%M-%S')
+          echo "Created artifacts folder with name: $(date +'%Y-%m-%d_%H-%M-%S')"
 
       # Publish artifacts if folder exists
       - name: Publish Artifacts
@@ -40,7 +41,10 @@ jobs:
       # Download artifacts to dynamically created folder
       - name: Download Artifacts
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/download-artifact@v2
-        with:
-          name: project-artifacts
-          path: my_artifacts/${{ steps.create_folder.outputs.stdout }}
+        run: |
+          mkdir -p my_artifacts/$(date +'%Y-%m-%d_%H-%M-%S')
+          echo "Created artifacts folder with name: $(date +'%Y-%m-%d_%H-%M-%S')"
+          ls -l my_artifacts
+          echo "Downloading artifacts to folder..."
+          curl -L -o my_artifacts/artifacts.zip ${{ steps.create_folder.outputs.stdout }}
+          unzip my_artifacts/artifacts.zip -d my_artifacts
