@@ -24,7 +24,5 @@ jobs:
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
       - name: Build Docker image
-        run: docker buildx build --platform windows/amd64 -t suprajaketha/appv1:latest .
-
-      - name: Push Docker image
-        run: docker buildx build --platform windows/amd64 -t suprajaketha/appv1:latest --push 
+        run: |
+          docker buildx build --platform windows/amd64 -t suprajaketha/appv1:latest .
