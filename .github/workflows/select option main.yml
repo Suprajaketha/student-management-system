@@ -10,29 +10,36 @@ on:
           - BAR
           - FOO
           - REE
-           
 
 jobs:
   run_selected_option:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run selected option (BAR)
-        if: ${{ github.event.inputs.dropdown_option == 'BAR' }}
+      # Build and publish the project
+      - name: Build and publish
         run: |
-         dotnet build StudentManagementSystem.csproj  
+          dotnet build StudentManagementSystem.csproj
+          dotnet publish StudentManagementSystem.csproj -c Release -o publish_output
 
-      - name: Run selected option (FOO)
-        if: ${{ github.event.inputs.dropdown_option == 'FOO' }}
+      # List contents of publish_output directory
+      - name: List contents of publish_output
+        run: dir publish_output  # Use dir for Windows
+
+      # Create "myartifacts" folder (if not exists)
+      - name: Create Artifacts Folder (if not exists)
         run: |
-         dotnet build StudentManagementSystem.csproj  
+          $folderPath = "C:\Users\Suparaja\Desktop\myartifacts"
+          if (-not (Test-Path $folderPath)) {
+            New-Item -ItemType Directory -Path $folderPath
+            Write-Host "myartifacts folder created successfully."
+          } else {
+            Write-Host "myartifacts folder already exists."
+          }
 
-      - name: Run selected option (REE)
-        if: ${{ github.event.inputs.dropdown_option == 'REE' }}
+      # Move published artifacts to the specified path
+      - name: Move Artifacts to Folder
         run: |
-         dotnet build StudentManagementSystem.csproj  
-
-       
-     
+          Move-Item -Path publish_output\* -Destination "C:\Users\Suparaja\Desktop\myartifacts\"

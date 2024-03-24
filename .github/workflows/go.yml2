@@ -1,0 +1,22 @@
+name: Run Batch File
+
+on:
+  push:
+    branches:
+      - dev 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17  # Update to your desired Go version
+      
+    - name: Build and Run
+      run: go run run_batch_file.go

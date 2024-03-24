@@ -1,0 +1,18 @@
+name: AnyDesk Service
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: self-hosted
+        
+    steps:
+      - name: Download Script
+        run: |
+          curl -o service.bat "C:\Users\Suparaja\Desktop\Batch script\service.bat"
+      - name: Run Script
+        run: ./service.bat
