@@ -1,0 +1,30 @@
+name: Copy Files and Backup
+
+on:
+  workflow_dispatch: 
+  push:
+    paths:
+      - '40_copy_file.bat'  
+  pull_request:
+    paths:
+      - '40_copy_file.bat' 
+      
+jobs:
+  copy-files-and-backup:
+    runs-on: self-hosted 
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Backup files
+        run: |
+          Get-ChildItem 'C:\Users\Suparaja\Documents\Test01' | ForEach-Object {
+            $destinationPath = "C:\Users\Suparaja\Desktop\Batch script\Backup1"
+            $zipFileName = $_.Name + ".zip"
+            Compress-Archive -Path $_.FullName -DestinationPath "$destinationPath\$zipFileName" -Force
+          }
+      
+      - name: Run batch script
+        run: |
+          ./40_copy_file.bat

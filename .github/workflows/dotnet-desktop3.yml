@@ -1,0 +1,19 @@
+name: Backup Before Deploy
+
+on:
+  push:
+    branches:
+      - master 
+
+jobs:
+  backup:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run Backup Script
+        run: |
+          cd ${{ github.workspace }}
+          .\Backup1.bat
