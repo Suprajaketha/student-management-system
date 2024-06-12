@@ -1,0 +1,10 @@
+Deployment Summary Report 
+======================== 
+Date: 12-06-2024 
+Time: 11:25:15.65 
+======================== 
+Application Name: MyApp 
+Environment: Production 
+Deployment Status: Success 
+Deployed By: Suparaja 
+Recipient Email: kethasupraja57@gmail.com 
