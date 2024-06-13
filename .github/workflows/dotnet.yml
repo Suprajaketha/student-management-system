@@ -3,7 +3,7 @@ name: Send Deployment Summary Report
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   send_report:
