@@ -1,28 +1,72 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET
+name: CI/CD Pipeline with Deployment Summary
 
 on:
   push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "dev" ]
+    branches:
+      - dev
+  workflow_dispatch:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up environment variables
+      run: |
+        echo "SMTP_USER=${{ secrets.SMTP_USER }}" >> $GITHUB_ENV
+        echo "SMTP_PASS=${{ secrets.SMTP_PASS }}" >> $GITHUB_ENV
+
+    - name: Build the application
+      run: echo Building the application...
+      # Add your build steps here
+
+    - name: Deploy the application
+      run: echo Deploying the application...
+      # Add your deployment steps here
+
+    - name: Generate and send deployment summary report
+      shell: pwsh
+      run: |
+        $SMTPServer = 'smtp.gmail.com'
+        $SMTPPort = 587
+        $SMTPUser = $env:SMTP_USER
+        $SMTPPass = $env:SMTP_PASS
+        $From = $env:SMTP_USER
+        $To = 'kethasupraja57@gmail.com'
+        $Subject = 'Deployment Summary Report'
+        $Body = 'Please find the attached deployment summary report.'
+        $Attachment = 'deployment_summary.txt'
+
+        # Generate the deployment summary report
+        $ReportContent = @"
+        Deployment Summary Report
+        ========================
+        Date: $(Get-Date)
+        Application Name: MyApp
+        Environment: Production
+        Deployment Status: Success
+        Deployed By: $($env:GITHUB_ACTOR)
+        ========================
+        "@
+
+        Set-Content -Path $Attachment -Value $ReportContent
+        Write-Host "Deployment summary report generated successfully."
+
+        # Send email
+        $SMTPMessage = New-Object System.Net.Mail.MailMessage($From, $To, $Subject, $Body)
+        $SMTPAttachment = New-Object System.Net.Mail.Attachment($Attachment)
+        $SMTPMessage.Attachments.Add($SMTPAttachment)
+
+        $SMTPClient = New-Object System.Net.Mail.SmtpClient($SMTPServer, $SMTPPort)
+        $SMTPClient.EnableSsl = $true
+        $SMTPClient.Credentials = New-Object System.Net.NetworkCredential($SMTPUser, $SMTPPass)
+
+        try {
+          $SMTPClient.Send($SMTPMessage)
+          Write-Host "Email sent successfully."
+        } catch {
+          Write-Host "Failed to send the email: $_"
+        }
