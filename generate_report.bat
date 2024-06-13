@@ -22,15 +22,15 @@ echo Deployment summary report generated successfully.
 
 :: PowerShell script to send email
 powershell -Command ^
-$SMTPServer = "smtp.gmail.com"; ^
+$SMTPServer = 'smtp.gmail.com'; ^
 $SMTPPort = 587; ^
-$SMTPUser = "kethasupraja57@gmail.com"; ^
-$SMTPPass = "Github@123"; ^
-$From = "kethasupraja57@gmail.com"; ^
-$To = "kethasupraja57@gmail.com"; ^
-$Subject = "Deployment Summary Report"; ^
-$Body = "Please find the attached deployment summary report."; ^
-$Attachment = "%report_file%"; ^
+$SMTPUser = 'kethasupraja57@gmail.com'; ^
+$SMTPPass = 'Github@123'; ^
+$From = 'kethasupraja57@gmail.com'; ^
+$To = 'kethasupraja57@gmail.com'; ^
+$Subject = 'Deployment Summary Report'; ^
+$Body = 'Please find the attached deployment summary report.'; ^
+$Attachment = '%report_file%'; ^
 $SMTPMessage = New-Object system.net.mail.mailmessage; ^
 $SMTPMessage.From = $From; ^
 $SMTPMessage.To.Add($To); ^
