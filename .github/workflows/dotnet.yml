@@ -77,3 +77,4 @@ jobs:
         } catch {
           Write-Host "Failed to send the email: $_"
         }
+ 
