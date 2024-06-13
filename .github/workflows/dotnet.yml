@@ -1,47 +1,37 @@
-name: Deployment Summary Report
+name: Send Deployment Summary Report
 
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
-  generate_report:
+  send_report:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up PowerShell
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'  # Replace with the version you want to use
-
-      - name: Generate Deployment Summary Report
-        shell: pwsh
+      - name: Generate Deployment Summary
         run: |
-          $ReportContent = @"
-          Deployment Summary Report
-          ========================
-          Date: $(Get-Date)
-          Application Name: MyApp
-          Environment: Production
-          Deployment Status: Success
-          Deployed By: ${{ github.actor }}
-          ========================
-          "@
-          Set-Content -Path deployment_summary.txt -Value $ReportContent
-          Write-Output "Deployment summary report generated successfully."
+          echo "Deployment Summary Report" > deployment_summary.txt
+          echo "==========================" >> deployment_summary.txt
+          echo "Date: $(date)" >> deployment_summary.txt
+          echo "Application Name: MyApp" >> deployment_summary.txt
+          echo "Environment: Production" >> deployment_summary.txt
+          echo "Deployment Status: Success" >> deployment_summary.txt
+          echo "Deployed By: $GITHUB_ACTOR" >> deployment_summary.txt
+          echo "==========================" >> deployment_summary.txt
 
-      - name: Send Deployment Summary Email
+      - name: Send Deployment Summary Report
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 587
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASS }}
+          from: ${{ secrets.SMTP_USER }}
+          to: kethasupraja@gmail.com
           subject: Deployment Summary Report
           body: Please find the attached deployment summary report.
-          to: kethasupraja@gmail.com
           attachments: deployment_summary.txt
