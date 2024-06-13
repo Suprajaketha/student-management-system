@@ -4,61 +4,41 @@ on:
   push:
     branches:
       - dev
-  workflow_dispatch:
 
 jobs:
-  send_report:
+  generate_report:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Set up PowerShell
+        uses: actions/setup-powershell@v2
 
-    - name: Set up PowerShell
-      uses: actions/setup-powershell@v2
+      - name: Generate Deployment Summary Report
+        run: |
+          $ReportContent = @"
+          Deployment Summary Report
+          ========================
+          Date: $(Get-Date)
+          Application Name: MyApp
+          Environment: Production
+          Deployment Status: Success
+          Deployed By: ${{ github.actor }}
+          ========================
+          "@
+          Set-Content -Path deployment_summary.txt -Value $ReportContent
+          Write-Output "Deployment summary report generated successfully."
 
-    - name: Generate and Send Deployment Summary Report
-      env:
-        SMTP_USER: ${{ secrets.SMTP_USER }}
-        SMTP_PASS: ${{ secrets.SMTP_PASS }}
-      run: |
-        Write-Host "SMTP_USER: $env:SMTP_USER"
-
-        $SMTPServer = 'smtp.gmail.com'
-        $SMTPPort = 587
-        $From = $env:SMTP_USER
-        $To = 'kethasupraja@gmail.com'
-        $Subject = 'Deployment Summary Report'
-        $Body = 'Please find the attached deployment summary report.'
-        $Attachment = 'deployment_summary.txt'
-
-        # Generate the deployment summary report
-        $ReportContent = @"
-        Deployment Summary Report
-        ========================
-        Date: $(Get-Date)
-        Application Name: MyApp
-        Environment: Production
-        Deployment Status: Success
-        Deployed By: $($env:GITHUB_ACTOR)
-        ========================
-        "@
-
-        Set-Content -Path $Attachment -Value $ReportContent
-        Write-Host "Deployment summary report generated successfully."
-
-        # Send email
-        $SMTPMessage = New-Object System.Net.Mail.MailMessage($From, $To, $Subject, $Body)
-        $SMTPAttachment = New-Object System.Net.Mail.Attachment($Attachment)
-        $SMTPMessage.Attachments.Add($SMTPAttachment)
-
-        $SMTPClient = New-Object System.Net.Mail.SmtpClient($SMTPServer, $SMTPPort)
-        $SMTPClient.EnableSsl = $true
-        $SMTPClient.Credentials = New-Object System.Net.NetworkCredential($SMTPUser, $SMTPPass)
-
-        try {
-          $SMTPClient.Send($SMTPMessage)
-          Write-Host "Email sent successfully."
-        } catch {
-          Write-Host "Failed to send the email: $_"
-        }
+      - name: Send Deployment Summary Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          subject: Deployment Summary Report
+          body: Please find the attached deployment summary report.
+          to: kethasupraja@gmail.com
+          attachments: deployment_summary.txt
