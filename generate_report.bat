@@ -24,9 +24,9 @@ echo Deployment summary report generated successfully.
 powershell -Command ^
 $SMTPServer = "smtp.gmail.com"; ^
 $SMTPPort = 587; ^
-$SMTPUser = "%GMAIL_USERNAME%"; ^
-$SMTPPass = "%GMAIL_APP_PASSWORD%"; ^
-$From = "%GMAIL_USERNAME%"; ^
+$SMTPUser = "kethasupraja57@gmail.com"; ^
+$SMTPPass = "Github@123"; ^
+$From = "kethasupraja57@gmail.com"; ^
 $To = "kethasupraja57@gmail.com"; ^
 $Subject = "Deployment Summary Report"; ^
 $Body = "Please find the attached deployment summary report."; ^
