@@ -20,15 +20,28 @@ echo Recipient Email: kethasupraja57@gmail.com >> %report_file%
 
 echo Deployment summary report generated successfully.
 
-:: Email configuration
-set "GMAIL_USERNAME=kethasupraja57@gmail.com"
-set "GMAIL_PASSWORD=Github@123"
-set "RECIPIENT_EMAIL=kethasupraja57@gmail.com"
-set "SMTP_SERVER=smtp.gmail.com"
-set "SMTP_PORT=587"
-
-:: Send the email using mailsend
-mailsend -smtp %SMTP_SERVER% -port %SMTP_PORT% -auth -user %GMAIL_USERNAME% -pass %GMAIL_PASSWORD% -t %RECIPIENT_EMAIL% -f %GMAIL_USERNAME% -sub "Deployment Summary Report" -M "Please find the attached deployment summary report." -attach %report_file%
+:: PowerShell script to send email
+powershell -Command ^
+$SMTPServer = "smtp.gmail.com"; ^
+$SMTPPort = 587; ^
+$SMTPUser = "%GMAIL_USERNAME%"; ^
+$SMTPPass = "%GMAIL_APP_PASSWORD%"; ^
+$From = "%GMAIL_USERNAME%"; ^
+$To = "kethasupraja57@gmail.com"; ^
+$Subject = "Deployment Summary Report"; ^
+$Body = "Please find the attached deployment summary report."; ^
+$Attachment = "%report_file%"; ^
+$SMTPMessage = New-Object system.net.mail.mailmessage; ^
+$SMTPMessage.From = $From; ^
+$SMTPMessage.To.Add($To); ^
+$SMTPMessage.Subject = $Subject; ^
+$SMTPMessage.Body = $Body; ^
+$SMTPAttachment = New-Object System.Net.Mail.Attachment($Attachment); ^
+$SMTPMessage.Attachments.Add($SMTPAttachment); ^
+$SMTPClient = New-Object Net.Mail.SmtpClient($SMTPServer, $SMTPPort); ^
+$SMTPClient.EnableSsl = $true; ^
+$SMTPClient.Credentials = New-Object System.Net.NetworkCredential($SMTPUser, $SMTPPass); ^
+$SMTPClient.Send($SMTPMessage)
 
 if %errorlevel% neq 0 (
     echo Failed to send the email.
