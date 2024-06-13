@@ -19,6 +19,13 @@ jobs:
         echo "SMTP_USER=${{ secrets.SMTP_USER }}" >> $GITHUB_ENV
         echo "SMTP_PASS=${{ secrets.SMTP_PASS }}" >> $GITHUB_ENV
 
+    - name: Debug environment variables
+      run: |
+        echo "SMTP_USER=$env:SMTP_USER"
+        echo "SMTP_PASS=$env:SMTP_PASS"
+        echo "From=$env:SMTP_USER"
+      shell: pwsh
+
     - name: Build the application
       run: echo Building the application...
       # Add your build steps here
@@ -39,7 +46,7 @@ jobs:
         $Subject = 'Deployment Summary Report'
         $Body = 'Please find the attached deployment summary report.'
         $Attachment = 'deployment_summary.txt'
-
+        
         # Generate the deployment summary report
         $ReportContent = @"
         Deployment Summary Report
@@ -51,19 +58,19 @@ jobs:
         Deployed By: $($env:GITHUB_ACTOR)
         ========================
         "@
-
+        
         Set-Content -Path $Attachment -Value $ReportContent
         Write-Host "Deployment summary report generated successfully."
-
+        
         # Send email
         $SMTPMessage = New-Object System.Net.Mail.MailMessage($From, $To, $Subject, $Body)
         $SMTPAttachment = New-Object System.Net.Mail.Attachment($Attachment)
         $SMTPMessage.Attachments.Add($SMTPAttachment)
-
+        
         $SMTPClient = New-Object System.Net.Mail.SmtpClient($SMTPServer, $SMTPPort)
         $SMTPClient.EnableSsl = $true
         $SMTPClient.Credentials = New-Object System.Net.NetworkCredential($SMTPUser, $SMTPPass)
-
+        
         try {
           $SMTPClient.Send($SMTPMessage)
           Write-Host "Email sent successfully."
