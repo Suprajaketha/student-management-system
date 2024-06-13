@@ -1,4 +1,4 @@
-name: Deployment Summary
+name: CI/CD Pipeline with Deployment Summary
 
 on:
   push:
@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  build: 
+  build:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository 
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Set up environment variables
@@ -70,5 +70,3 @@ jobs:
         } catch {
           Write-Host "Failed to send the email: $_"
         }
-
-
