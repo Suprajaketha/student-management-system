@@ -6,7 +6,7 @@ on:
       - dev
 
 jobs:
-  send_report:
+  send_report: 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
