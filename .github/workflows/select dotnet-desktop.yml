@@ -1,7 +1,7 @@
 name: Dispatch Pipeline
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: 
     inputs:
       environment:
         description: 'Select environment to deploy'
