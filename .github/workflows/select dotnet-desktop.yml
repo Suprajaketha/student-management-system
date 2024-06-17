@@ -14,33 +14,64 @@ on:
           - com
 
 jobs:
-  check_and_deploy_pro:
+  check_and_deploy:
     runs-on: ubuntu-latest
-    if: github.event.inputs.environment == 'pro' && github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch'
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Fetch environment settings
+        uses: actions/github-script@v5
         with:
-          ref: dev
+          github-token: ${{ secrets.GITHUB_PAT }}
+          script: |
+            const { data: proEnvironment } = await github.repos.getEnvironment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              environment_name: 'pro'
+            });
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+            const { data: stageEnvironment } = await github.repos.getEnvironment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              environment_name: 'stage'
+            });
 
-      - name: Install dependencies
-        run: npm install
+            const { data: comEnvironment } = await github.repos.getEnvironment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              environment_name: 'com'
+            });
 
-      - name: Check if conditions for pro environment are met
-        id: check_pro_conditions
+            // Extract conditions from environment settings
+            const proApprovalsRequired = proEnvironment.approvals_required;
+            const proTimerDelaySeconds = proEnvironment.wait_timer.duration_seconds;
+            const stageBypassRules = stageEnvironment.bypass_rules;
+            const comBypassRules = comEnvironment.bypass_rules;
+
+            // Set outputs based on environment settings
+            core.setOutput('pro_approvals_required', proApprovalsRequired);
+            core.setOutput('pro_timer_delay_seconds', proTimerDelaySeconds);
+            core.setOutput('stage_bypass_rules', stageBypassRules);
+            core.setOutput('com_bypass_rules', comBypassRules);
+
+      - name: Deploy based on environment settings
         run: |
-          # Use GitHub API to check if conditions (approvals, time delays) for the "pro" environment are met
-          # Example using GitHub Script:
-          # https://docs.github.com/en/rest/reference/repos#get-environment
-          # echo "::set-output name=conditions_met::true"
-
-      - name: Trigger deployment if conditions are met
-        if: steps.check_pro_conditions.outputs.conditions_met == 'true'
-        run: |
-          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_PAT }}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/yourusername/yourrepository/actions/workflows/dispatch.yml/dispatches -d '{"ref":"refs/heads/dev","inputs":{"environment":"pro"}}'
+          if [[ ${{ github.event.inputs.environment }} == 'pro' ]]; then
+            # Check if approvals are required and time delay has passed
+            if [[ "${{ steps.check_and_deploy.outputs.pro_approvals_required }}" == 'true' ]]; then
+              # Add logic to check for approvals and wait for timer delay
+              # Example:
+              # Check approvals using GitHub API
+              # Wait for timer delay
+              echo "Approvals required for pro environment, checking approvals and waiting for timer delay..."
+            else
+              echo "Approvals not required for pro environment, proceeding with deployment..."
+              # Add deployment logic for pro environment
+            fi
+          elif [[ ${{ github.event.inputs.environment }} == 'stage' ]]; then
+            echo "Bypass rules allowed for stage environment, proceeding with deployment..."
+            # Add deployment logic for stage environment
+          elif [[ ${{ github.event.inputs.environment }} == 'com' ]]; then
+            echo "Bypass rules allowed for com environment, proceeding with deployment..."
+            # Add deployment logic for com environment
+          fi
