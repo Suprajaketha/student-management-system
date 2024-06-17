@@ -2,6 +2,11 @@ name: Dispatch Pipeline
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select environment to deploy'
+        required: true
+        default: 'pro' # Default to pro environment if not specified
 
 jobs:
   deploy:
@@ -23,7 +28,7 @@ jobs:
               stage: stageEnv,
               com: comEnv
             };
-      
+
       - name: Deploy to Pro
         if: ${{ github.event.inputs.environment == 'pro' && steps.env.outputs.pro }}
         run: |
