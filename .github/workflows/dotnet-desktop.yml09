@@ -14,59 +14,39 @@ on:
           - com
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          ref: dev
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: '6.0.x'
-
-      - name: Restore dependencies
-        run: dotnet restore MyApp.sln
-
-      - name: Build
-        run: dotnet build MyApp.sln --configuration Release --no-restore
-
-      - name: Publish
-        run: dotnet publish MyApp.sln --configuration Release --no-build --output ./publish
-
-      - name: Archive artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: deployment-artifacts
-          path: ./publish
-
   deploy:
     runs-on: ubuntu-latest
-    needs: build
-    environment: ${{ github.event.inputs.environment }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           ref: dev
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          name: deployment-artifacts
-          path: ./publish
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Deploy to pro
-        if: github.event.inputs.environment == 'pro'
+        if: github.event.inputs.environment == 'pro' && github.event_name == 'workflow_dispatch' && github.event.action == 'opened'
         run: |
-          echo "Deploying to pro environment"
+          echo "Hey, this is pro"
           # Add deployment scripts/commands for pro here
           # Example: Copy files to server, restart services, etc.
-        environment:
-          name: pro
 
       - name: Deploy to stage
+        if: github.event.inputs.environment == 'stage' && github.event_name == 'workflow_dispatch' && github.event.action == 'opened'
+        run: |
+          echo "Hey, this is stage"
+          # Add deployment scripts/commands for stage here
+          # Example: Copy files to server, restart services, etc.
+
+      - name: Deploy to com
+        if: github.event.inputs.environment == 'com' && github.event_name == 'workflow_dispatch' && github.event.action == 'opened'
+        run: |
+          echo "Hey, this is com"
+          # Add deployment scripts/commands for com here
+          # Example: Copy files to server, restart services, etc.
