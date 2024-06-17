@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deployment environment'
+        description: 'Deployment environment' 
         required: true
         default: 'com'
         type: choice
@@ -50,3 +50,6 @@ jobs:
           echo "Hey, this is com"
           # Add deployment scripts/commands for com here
           # Example: Copy files to server, restart services, etc. 
+          #creating a environment
+
+
