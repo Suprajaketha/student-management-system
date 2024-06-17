@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deployment environment' 
+        description: 'Deployment environment'
         required: true
         default: 'com'
         type: choice
@@ -14,8 +14,10 @@ on:
           - com
 
 jobs:
-  deploy:
+  deploy_pro:
     runs-on: ubuntu-latest
+    if: github.event.inputs.environment == 'pro'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -31,25 +33,55 @@ jobs:
         run: npm install
 
       - name: Deploy to pro
-        if: github.event.inputs.environment == 'pro' && github.event_name == 'workflow_dispatch' && github.event.action == 'opened'
         run: |
           echo "Hey, this is pro"
           # Add deployment scripts/commands for pro here
           # Example: Copy files to server, restart services, etc.
 
+  deploy_stage:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.environment == 'stage'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: dev
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Deploy to stage
-        if: github.event.inputs.environment == 'stage' && github.event_name == 'workflow_dispatch' && github.event.action == 'opened'
         run: |
           echo "Hey, this is stage"
           # Add deployment scripts/commands for stage here
           # Example: Copy files to server, restart services, etc.
 
+  deploy_com:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.environment == 'com'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: dev
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Deploy to com
-        if: github.event.inputs.environment == 'com' && github.event_name == 'workflow_dispatch' && github.event.action == 'opened'
         run: |
           echo "Hey, this is com"
           # Add deployment scripts/commands for com here
-          # Example: Copy files to server, restart services, etc. 
-          #creating a environment
-
-
+          # Example: Copy files to server, restart services, etc.
