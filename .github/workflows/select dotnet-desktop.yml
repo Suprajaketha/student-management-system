@@ -24,46 +24,30 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_PAT }}
           script: |
-            const { data: pro } = await github.repos.getEnvironment({
+            const { data: proEnv } = await github.repos.getEnvironment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               environment_name: 'pro'
             });
 
-            const { data: stage } = await github.repos.getEnvironment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              environment_name: 'stage'
-            });
-
-            const { data: com } = await github.repos.getEnvironment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              environment_name: 'com'
-            });
-
-            // Extract conditions from environment settings
-            const proApprovalsRequired = pro.approvals_required;
-            const proTimerDelaySeconds = pro.wait_timer.duration_seconds;
-            const stageBypassRules = stage.bypass_rules;
-            const comBypassRules = com.bypass_rules;
-
             // Set outputs based on environment settings
-            core.setOutput('pro_approvals_required', proApprovalsRequired);
-            core.setOutput('pro_timer_delay_seconds', proTimerDelaySeconds);
-            core.setOutput('stage_bypass_rules', stageBypassRules);
-            core.setOutput('com_bypass_rules', comBypassRules);
+            core.setOutput('pro_approvals_required', proEnv.approvals_required);
+            core.setOutput('pro_timer_delay_seconds', proEnv.wait_timer.duration_seconds);
+
+      - name: Prompt for approvals for pro environment
+        if: ${{ github.event.inputs.environment == 'pro' }}
+        run: |
+          echo "Approvals are required for pro environment. Please wait for approvals before proceeding with deployment."
 
       - name: Deploy based on environment settings
         run: |
           if [[ ${{ github.event.inputs.environment }} == 'pro' ]]; then
-            # Check if approvals are required and time delay has passed
             if [[ "${{ steps.check_and_deploy.outputs.pro_approvals_required }}" == 'true' ]]; then
+              echo "Approvals are required for pro environment. Please wait for approvals before proceeding with deployment."
               # Add logic to check for approvals and wait for timer delay
               # Example:
               # Check approvals using GitHub API
               # Wait for timer delay
-              echo "Approvals required for pro environment, checking approvals and waiting for timer delay..."
             else
               echo "Approvals not required for pro environment, proceeding with deployment..."
               # Add deployment logic for pro environment
