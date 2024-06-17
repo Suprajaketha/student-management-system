@@ -32,7 +32,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Check conditions for pro environment
+        run: |
+          # Check if conditions for pro environment are met
+          # Example: Check if a reviewer has approved and timer wait has passed
+
       - name: Deploy to pro
+        if: success()
         run: |
           echo "Hey, this is pro"
           # Add deployment scripts/commands for pro here
