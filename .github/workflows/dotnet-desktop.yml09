@@ -2,8 +2,6 @@ name: Dispatch Pipeline
 
 on:
   workflow_dispatch:
-    branches:
-      - dev
     inputs:
       environment:
         description: 'Deployment environment'
@@ -72,19 +70,3 @@ jobs:
           name: pro
 
       - name: Deploy to stage
-        if: github.event.inputs.environment == 'stage'
-        run: |
-          echo "Deploying to stage environment"
-          # Add deployment scripts/commands for stage here
-          # Example: Copy files to server, restart services, etc.
-        environment:
-          name: stage
-
-      - name: Deploy to com
-        if: github.event.inputs.environment == 'com'
-        run: |
-          echo "Deploying to com environment"
-          # Add deployment scripts/commands for com here
-          # Example: Copy files to server, restart services, etc.
-        environment:
-          name: com
