@@ -2,60 +2,42 @@ name: Dispatch Pipeline
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Deployment environment'
-        required: true
-        default: 'com'
-        type: choice
-        options:
-          - pro
-          - stage
-          - com
 
 jobs:
-  check_and_deploy:
+  deploy:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-
     steps:
-      - name: Fetch environment settings
+      - name: Check Environment
+        id: env
         uses: actions/github-script@v5
         with:
           github-token: ${{ secrets.GITHUB_PAT }}
           script: |
-            const { data: proEnv } = await github.repos.getEnvironment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              environment_name: 'pro'
-            });
-
-            // Set outputs based on environment settings
-            core.setOutput('pro_approvals_required', proEnv.approvals_required);
-            core.setOutput('pro_timer_delay_seconds', proEnv.wait_timer.duration_seconds);
-
-      - name: Prompt for approvals for pro environment
-        if: ${{ github.event.inputs.environment == 'pro' }}
+            const { data } = await github.request('GET /repos/{owner}/{repo}/environments');
+            const envs = data.environments;
+            const proEnv = envs.find(env => env.name === 'pro');
+            const stageEnv = envs.find(env => env.name === 'stage');
+            const comEnv = envs.find(env => env.name === 'com');
+            return {
+              pro: proEnv,
+              stage: stageEnv,
+              com: comEnv
+            };
+      
+      - name: Deploy to Pro
+        if: ${{ github.event.inputs.environment == 'pro' && steps.env.outputs.pro }}
         run: |
-          echo "Approvals are required for pro environment. Please wait for approvals before proceeding with deployment."
+          echo "Hey, this is pro."
+          # Add deployment steps for pro environment here
 
-      - name: Deploy based on environment settings
+      - name: Deploy to Stage
+        if: ${{ github.event.inputs.environment == 'stage' && steps.env.outputs.stage }}
         run: |
-          if [[ ${{ github.event.inputs.environment }} == 'pro' ]]; then
-            if [[ "${{ steps.check_and_deploy.outputs.pro_approvals_required }}" == 'true' ]]; then
-              echo "Approvals are required for pro environment. Please wait for approvals before proceeding with deployment."
-              # Add logic to check for approvals and wait for timer delay
-              # Example:
-              # Check approvals using GitHub API
-              # Wait for timer delay
-            else
-              echo "Approvals not required for pro environment, proceeding with deployment..."
-              # Add deployment logic for pro environment
-            fi
-          elif [[ ${{ github.event.inputs.environment }} == 'stage' ]]; then
-            echo "Bypass rules allowed for stage environment, proceeding with deployment..."
-            # Add deployment logic for stage environment
-          elif [[ ${{ github.event.inputs.environment }} == 'com' ]]; then
-            echo "Bypass rules allowed for com environment, proceeding with deployment..."
-            # Add deployment logic for com environment
-          fi
+          echo "Hey, this is stage."
+          # Add deployment steps for stage environment here
+
+      - name: Deploy to Com
+        if: ${{ github.event.inputs.environment == 'com' && steps.env.outputs.com }}
+        run: |
+          echo "Hey, this is com."
+          # Add deployment steps for com environment here
