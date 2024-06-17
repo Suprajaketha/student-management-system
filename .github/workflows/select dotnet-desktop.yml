@@ -24,70 +24,15 @@ jobs:
         with:
           ref: dev
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Check conditions for pro environment
+      - name: Check if conditions for pro environment are met
+        id: check_pro_conditions
         run: |
-          # Check if conditions for pro environment are met
-          # Example: Check if a reviewer has approved and timer wait has passed
+          # Use GitHub API or custom script to check if approvals and wait time conditions are met for the "pro" environment
+          # Example using GitHub Script:
+          # echo "::set-output name=conditions_met::true"
 
       - name: Deploy to pro
-        if: success()
+        if: steps.check_pro_conditions.outputs.conditions_met == 'true'
         run: |
           echo "Hey, this is pro"
           # Add deployment scripts/commands for pro here
-          # Example: Copy files to server, restart services, etc.
-
-  deploy_stage:
-    runs-on: ubuntu-latest
-    if: github.event.inputs.environment == 'stage'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          ref: dev
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Deploy to stage
-        run: |
-          echo "Hey, this is stage"
-          # Add deployment scripts/commands for stage here
-          # Example: Copy files to server, restart services, etc.
-
-  deploy_com:
-    runs-on: ubuntu-latest
-    if: github.event.inputs.environment == 'com'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          ref: dev
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Deploy to com
-        run: |
-          echo "Hey, this is com"
-          # Add deployment scripts/commands for com here
-          # Example: Copy files to server, restart services, etc.
