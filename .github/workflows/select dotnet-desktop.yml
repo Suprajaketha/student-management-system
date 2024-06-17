@@ -14,9 +14,9 @@ on:
           - com
 
 jobs:
-  deploy_pro:
+  check_and_deploy_pro:
     runs-on: ubuntu-latest
-    if: github.event.inputs.environment == 'pro'
+    if: github.event.inputs.environment == 'pro' && github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Checkout code
@@ -24,15 +24,23 @@ jobs:
         with:
           ref: dev
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Check if conditions for pro environment are met
         id: check_pro_conditions
         run: |
-          # Use GitHub API or custom script to check if approvals and wait time conditions are met for the "pro" environment
+          # Use GitHub API to check if conditions (approvals, time delays) for the "pro" environment are met
           # Example using GitHub Script:
+          # https://docs.github.com/en/rest/reference/repos#get-environment
           # echo "::set-output name=conditions_met::true"
 
-      - name: Deploy to pro
+      - name: Trigger deployment if conditions are met
         if: steps.check_pro_conditions.outputs.conditions_met == 'true'
         run: |
-          echo "Hey, this is pro"
-          # Add deployment scripts/commands for pro here
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_PAT }}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/yourusername/yourrepository/actions/workflows/dispatch.yml/dispatches -d '{"ref":"refs/heads/dev","inputs":{"environment":"pro"}}'
