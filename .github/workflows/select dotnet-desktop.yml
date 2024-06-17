@@ -24,29 +24,29 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_PAT }}
           script: |
-            const { data: proEnvironment } = await github.repos.getEnvironment({
+            const { data: pro } = await github.repos.getEnvironment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               environment_name: 'pro'
             });
 
-            const { data: stageEnvironment } = await github.repos.getEnvironment({
+            const { data: stage } = await github.repos.getEnvironment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               environment_name: 'stage'
             });
 
-            const { data: comEnvironment } = await github.repos.getEnvironment({
+            const { data: com } = await github.repos.getEnvironment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               environment_name: 'com'
             });
 
             // Extract conditions from environment settings
-            const proApprovalsRequired = proEnvironment.approvals_required;
-            const proTimerDelaySeconds = proEnvironment.wait_timer.duration_seconds;
-            const stageBypassRules = stageEnvironment.bypass_rules;
-            const comBypassRules = comEnvironment.bypass_rules;
+            const proApprovalsRequired = pro.approvals_required;
+            const proTimerDelaySeconds = pro.wait_timer.duration_seconds;
+            const stageBypassRules = stage.bypass_rules;
+            const comBypassRules = com.bypass_rules;
 
             // Set outputs based on environment settings
             core.setOutput('pro_approvals_required', proApprovalsRequired);
