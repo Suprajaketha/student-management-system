@@ -2,6 +2,8 @@ name: Dispatch Pipeline
 
 on:
   workflow_dispatch:
+    branches:
+      - dev
     inputs:
       environment:
         description: 'Deployment environment'
@@ -20,10 +22,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: dev
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
-
         with:
           dotnet-version: '6.0.x'
 
@@ -50,6 +53,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: dev
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
@@ -65,7 +70,6 @@ jobs:
           # Example: Copy files to server, restart services, etc.
         environment:
           name: pro
-          url: https://your-pro-url.com
 
       - name: Deploy to stage
         if: github.event.inputs.environment == 'stage'
@@ -75,7 +79,6 @@ jobs:
           # Example: Copy files to server, restart services, etc.
         environment:
           name: stage
-          url: https://your-stage-url.com
 
       - name: Deploy to com
         if: github.event.inputs.environment == 'com'
@@ -85,4 +88,3 @@ jobs:
           # Example: Copy files to server, restart services, etc.
         environment:
           name: com
-          url: https://your-com-url.com
