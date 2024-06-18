@@ -1,48 +1,45 @@
 name: Dispatch Pipeline
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
     inputs:
       environment:
-        description: 'Select environment to deploy'
+        description: 'Deployment environment'
         required: true
-        options: ['pro', 'stage', 'com']
+        default: 'com'
+        type: choice
+        options:
+          - pro
+          - stage
+          - com
 
 jobs:
-  deploy:
+  check_and_deploy_pro:
     runs-on: ubuntu-latest
+    if: github.event.inputs.environment == 'pro' && github.event_name == 'workflow_dispatch'
+
     steps:
-      - name: Check Environment
-        id: env
-        uses: actions/github-script@v5
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
-          github-token: ${{ secrets.GITHUB_PAT }}
-          script: |
-            const { data } = await github.request('GET /repos/{owner}/{repo}/environments');
-            const envs = data.environments;
-            const proEnv = envs.find(env => env.name === 'pro');
-            const stageEnv = envs.find(env => env.name === 'stage');
-            const comEnv = envs.find(env => env.name === 'com');
-            return {
-              pro: proEnv,
-              stage: stageEnv,
-              com: comEnv
-            };
+          ref: dev
 
-      - name: Deploy to Pro
-        if: ${{ github.event.inputs.environment == 'pro' && steps.env.outputs.pro }}
-        run: |
-          echo "Hey, this is pro."
-          # Add deployment steps for pro environment here
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
-      - name: Deploy to Stage
-        if: ${{ github.event.inputs.environment == 'stage' && steps.env.outputs.stage }}
-        run: |
-          echo "Hey, this is stage."
-          # Add deployment steps for stage environment here
+      - name: Install dependencies
+        run: npm install
 
-      - name: Deploy to Com
-        if: ${{ github.event.inputs.environment == 'com' && steps.env.outputs.com }}
+      - name: Check if conditions for pro environment are met
+        id: check_pro_conditions
         run: |
-          echo "Hey, this is com."
-          # Add deployment steps for com environment here
+          # Use GitHub API to check if conditions (approvals, time delays) for the "pro" environment are met
+          # Example using GitHub Script:
+          # https://docs.github.com/en/rest/reference/repos#get-environment
+          # echo "::set-output name=conditions_met::true"
+      - name: Trigger deployment if conditions are met
+        if: steps.check_pro_conditions.outputs.conditions_met == 'true'
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_PAT }}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/yourusername/yourrepository/actions/workflows/dispatch.yml/dispatches -d '{"ref":"refs/heads/dev","inputs":{"environment":"pro"}}'
