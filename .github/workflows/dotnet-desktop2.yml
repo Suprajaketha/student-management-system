@@ -3,7 +3,7 @@ name: Copy Files and Backup
 on:
   workflow_dispatch:
   schedule:
-    - cron: '40 11 * * *'  # Runs at 08:30 UTC, closest to 14:30 IST every day
+    - cron: '*/5 * * * *'  # Runs every 5 minutes
   push:
     paths:
       - '40_copy_file.bat'
