@@ -6,7 +6,7 @@ on:
       scheduled_time:
         description: 'Scheduled Time in IST (HH:MM format)'
         required: true
-        default: '13:15'
+        default: '13:17'
 
 jobs:
   timed-job:
@@ -38,4 +38,4 @@ jobs:
           # Example using GitHub Script:
           # https://docs.github.com/en/rest/reference/repos#get-environment
           # echo "::set-output name=conditions_met::true"
-          shell: /usr/bin/bash -e {0}
+          /usr/bin/bash -e -c "/usr/bin/bash -e {0}"
