@@ -2,8 +2,8 @@ name: Copy Files and Backup
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '*/5 * * * *'  # Runs every 5 minutes
+  #schedule:
+   # - cron: '*/5 * * * *'  # Runs every 5 minutes
   push:
     paths:
       - '40_copy_file.bat'
