@@ -1,37 +1,28 @@
-name: Dispatch and Scheduled Pipeline
+name: Scheduled Pipeline (Dev Branch)
 
 on:
-  workflow_dispatch:
-    inputs:
-      scheduled_time:
-        description: 'Scheduled Time in IST (HH:MM format)'
-        required: true
-        default: '13:25'
+  schedule:
+    - cron: '40 13 * * *'  # Runs at 13:40 IST every day
 
 jobs:
-  timed-job:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest  # Adjust as needed
     steps:
-      - name: Set up time variables
-        id: time
+      - uses: actions/checkout@v3  # Checkout code from repository
+      - name: Select Branch
+        run: git checkout dev  # Switch to dev branch
+      - name: Install Dependencies (if applicable)
         run: |
-          export TZ=Asia/Kolkata
-          current_time=$(date +"%H:%M")
-          echo "current_time=$current_time" >> $GITHUB_ENV
-          scheduled_time="${{ github.event.inputs.scheduled_time }}"
-          echo "scheduled_time=$scheduled_time" >> $GITHUB_ENV
-
-      - name: Check if triggered at the correct time
+          npm install  # Example for npm packages
+          # Or
+          pip install  # Example for pip packages
+      - name: Run Tests (if applicable)
         run: |
-          if [ "$current_time" == "$scheduled_time" ]; then
-            echo "The job is running at the scheduled time: $scheduled_time IST"
-          else
-            echo "The job was manually triggered or is not running at the scheduled time. Scheduled time is $scheduled_time IST, current time is $current_time IST"
-          fi
-        env:
-          current_time: ${{ env.current_time }}
-          scheduled_time: ${{ env.scheduled_time }}
-
-      - name: Execute pipeline task
+          npm test  # Example for npm scripts
+          # Or
+          pytest  # Example for pytest
+      - name: Build (if applicable)
         run: |
-          /usr/bin/bash -e -c "/usr/bin/bash -e -c 'echo \"::set-output name=conditions_met::true\"'"
+          npm run build  # Example for npm scripts
+          # Or
+          make build  # Example for makefile
