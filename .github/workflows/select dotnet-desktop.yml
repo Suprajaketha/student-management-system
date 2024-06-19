@@ -1,45 +1,45 @@
-name: Dispatch Pipeline
+name: Dispatch and Scheduled Pipeline
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Deployment environment'
-        required: true
-        default: 'com'
-        type: choice
-        options:
-          - pro
-          - stage
-          - com
+  push:
+    branches:
+      - dev
+  workflow_dispatch: # Allows manual triggering of the workflow
+  schedule:
+    - cron: '0 13 * * *' # This will trigger the workflow every day at 13:00 PM IST
 
 jobs:
-  check_and_deploy_pro:
+  timed-job:
+    if: github.ref == 'refs/heads/dev' && matrix.environment == 'pro'
     runs-on: ubuntu-latest
-    if: github.event.inputs.environment == 'pro' && github.event_name == 'workflow_dispatch'
-
+    strategy:
+      matrix:
+        environment: ['pro']
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          ref: dev
+      - name: Set up time variables
+        id: time
+        run: |
+          export TZ=Asia/Kolkata
+          current_time=$(date +"%H:%M")
+          echo "current_time=$current_time" >> $GITHUB_ENV
+          scheduled_time="13:00"
+          echo "scheduled_time=$scheduled_time" >> $GITHUB_ENV
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      - name: Check if triggered at the correct time
+        run: |
+          if [ "$current_time" == "$scheduled_time" ]; then
+            echo "The job is running at the scheduled time: $scheduled_time IST"
+          else
+            echo "The job was manually triggered or is not running at the scheduled time. Scheduled time is $scheduled_time IST, current time is $current_time IST"
+          fi
+        env:
+          current_time: ${{ env.current_time }}
+          scheduled_time: ${{ env.scheduled_time }}
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Check if conditions for pro environment are met
-        id: check_pro_conditions
+      - name: Execute pipeline task
         run: |
           # Use GitHub API to check if conditions (approvals, time delays) for the "pro" environment are met
           # Example using GitHub Script:
           # https://docs.github.com/en/rest/reference/repos#get-environment
           # echo "::set-output name=conditions_met::true"
-      - name: Trigger deployment if conditions are met
-        if: steps.check_pro_conditions.outputs.conditions_met == 'true'
-        run: |
-          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_PAT }}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/yourusername/yourrepository/actions/workflows/dispatch.yml/dispatches -d '{"ref":"refs/heads/dev","inputs":{"environment":"pro"}}'
+          shell: /usr/bin/bash -e {0}
