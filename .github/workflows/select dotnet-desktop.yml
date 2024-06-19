@@ -1,17 +1,13 @@
 name: Dispatch and Scheduled Pipeline
 
 on:
-  push:
-    branches:
-      - dev
-  workflow_dispatch: # Allows manual triggering of the workflow
-  schedule: 
+  schedule:
     - cron: '5 7 * * *' # This will trigger the workflow every day at 07:05 AM UTC (which is 12:35 PM IST)
 
 jobs:
   timed-job:
-    if: github.ref == 'refs/heads/dev' && github.event_name == 'schedule' && github.event.schedule == 'cron(5 7 * * *)'
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'schedule' && github.event.schedule == 'cron(5 7 * * *)' && github.ref == 'refs/heads/dev' }}
     steps:
       - name: Set up time variables
         id: time
