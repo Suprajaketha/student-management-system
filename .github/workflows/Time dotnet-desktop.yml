@@ -6,7 +6,7 @@ on:
       scheduled_time:
         description: 'Scheduled Time in IST (HH:MM format)'
         required: true
-        default: '13:20'
+        default: '13:25'
 
 jobs:
   timed-job:
