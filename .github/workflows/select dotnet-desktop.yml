@@ -10,11 +10,8 @@ on:
 
 jobs:
   timed-job:
-    if: github.ref == 'refs/heads/dev' && matrix.environment == 'pro'
+    if: github.ref == 'refs/heads/dev' && github.event_name == 'schedule' && github.event.schedule == 'cron(5 7 * * *)'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: ['pro']
     steps:
       - name: Set up time variables
         id: time
