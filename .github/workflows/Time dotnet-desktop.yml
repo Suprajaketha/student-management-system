@@ -20,4 +20,4 @@ jobs:
           fi
 
       - name: Execute pipeline task
-        run: echo "Executing the pipeline task..."
+        run: echo "Executing the pipeline task..."   
