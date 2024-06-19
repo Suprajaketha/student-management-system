@@ -1,4 +1,4 @@
-name: Dispatch and Scheduled Pipeline
+name: Scheduled Pipeline
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - dev
   workflow_dispatch: # Allows manual triggering of the workflow
   schedule:
-    - cron: '15 7 * * *' # This will trigger the workflow every day at 07:15 AM UTC (which is 12:45 PM IST)
+    - cron: '22 7 * * *' # This will trigger the workflow every day at 07:22 AM UTC (which is 12:52 PM IST)
 
 jobs:
   timed-job:
@@ -19,7 +19,7 @@ jobs:
           export TZ=Asia/Kolkata
           current_time=$(date +"%H:%M")
           echo "current_time=$current_time" >> $GITHUB_ENV
-          scheduled_time="12:45"
+          scheduled_time="12:52"
           echo "scheduled_time=$scheduled_time" >> $GITHUB_ENV
 
       - name: Check if triggered at the correct time
