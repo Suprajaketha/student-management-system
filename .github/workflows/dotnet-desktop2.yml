@@ -3,19 +3,19 @@ name: Copy Files and Backup
 on:
   workflow_dispatch:
   schedule:
-    - cron: '15 08:15 * * *'  # Runs at 1:45 PM IST every day
+    - cron: '59 08:59 * * *'  # Runs at 1:59 PM IST every day
   push:
     paths:
-      - '40_copy_file.bat'  
+      - '40_copy_file.bat'
       - 'generate_report.bat'
   pull_request:
     paths:
-      - '40_copy_file.bat' 
+      - '40_copy_file.bat'
       - 'generate_report.bat'
 
 jobs:
   copy-files-and-backup:
-    runs-on: self-hosted 
+    runs-on: self-hosted  
 
     steps:
       - name: Checkout repository
