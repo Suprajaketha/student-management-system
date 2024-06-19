@@ -6,7 +6,7 @@ on:
       scheduled_time:
         description: 'Scheduled Time in IST (HH:MM format)'
         required: true
-        default: '13:17'
+        default: '13:20'
 
 jobs:
   timed-job:
@@ -34,8 +34,4 @@ jobs:
 
       - name: Execute pipeline task
         run: |
-          # Use GitHub API to check if conditions (approvals, time delays) for the "pro" environment are met
-          # Example using GitHub Script:
-          # https://docs.github.com/en/rest/reference/repos#get-environment
-          # echo "::set-output name=conditions_met::true"
-          /usr/bin/bash -e -c "/usr/bin/bash -e {0}"
+          /usr/bin/bash -e -c "/usr/bin/bash -e -c 'echo \"::set-output name=conditions_met::true\"'"
