@@ -5,7 +5,7 @@ on:
     branches:
       - dev
   workflow_dispatch: # Allows manual triggering of the workflow
-  schedule:
+  schedule: 
     - cron: '5 7 * * *' # This will trigger the workflow every day at 07:05 AM UTC (which is 12:35 PM IST)
 
 jobs:
