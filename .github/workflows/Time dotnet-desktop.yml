@@ -6,7 +6,7 @@ on:
       - dev
   workflow_dispatch: # Allows manual triggering of the workflow
   schedule:
-    - cron: '15 0 * * *' # This will trigger the workflow every day at 12:15 AM UTC
+    - cron: '50 18 * * *' # This will trigger the workflow every day at 12:20 AM IST (which is 18:50 UTC)
 
 jobs:
   timed-job:
@@ -16,8 +16,10 @@ jobs:
       - name: Set up time variables
         id: time
         run: |
-          echo "current_time=$(date -u +'%H:%M')" >> $GITHUB_ENV
-          echo "scheduled_time=00:15" >> $GITHUB_ENV
+          current_time=$(date -u +"%H:%M")
+          echo "current_time=$(date -u +"%H:%M")" >> $GITHUB_ENV
+          scheduled_time="18:50"
+          echo "scheduled_time=18:50" >> $GITHUB_ENV
 
       - name: Check if triggered at the correct time
         run: |
