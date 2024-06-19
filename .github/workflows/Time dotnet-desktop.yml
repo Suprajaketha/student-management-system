@@ -1,23 +1,32 @@
-name: Scheduled and Manual Pipeline
+name: Dispatch and Scheduled Pipeline
 
 on:
-  schedule:
-    - cron: '0 8 * * *' # This will trigger the workflow every day at 8:00 AM UTC
+  push:
+    branches:
+      - dev
   workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
   timed-job:
+    if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
+      - name: Set up time variables
+        id: time
+        run: |
+          echo "current_time=$(date -u +"%H:%M")" >> $GITHUB_ENV
+          echo "scheduled_time=08:00" >> $GITHUB_ENV
+
       - name: Check if triggered at the correct time
         run: |
-          current_time=$(date -u +"%H:%M")
-          scheduled_time="08:00"
           if [ "$current_time" == "$scheduled_time" ]; then
             echo "The job is running at the scheduled time: $scheduled_time UTC"
           else
             echo "The job was manually triggered or is not running at the scheduled time. Scheduled time is $scheduled_time UTC, current time is $current_time UTC"
           fi
+        env:
+          current_time: ${{ env.current_time }}
+          scheduled_time: ${{ env.scheduled_time }}
 
       - name: Execute pipeline task
-        run: echo "Executing the pipeline task..."   
+        run: echo "Executing the pipeline task..."
