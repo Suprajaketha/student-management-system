@@ -1,13 +1,16 @@
 name: Dispatch and Scheduled Pipeline
 
 on:
-  schedule:
-    - cron: '5 7 * * *' # This will trigger the workflow every day at 07:05 AM UTC (which is 12:35 PM IST)
+  workflow_dispatch:
+    inputs:
+      scheduled_time:
+        description: 'Scheduled Time in IST (HH:MM format)'
+        required: true
+        default: '13:10'
 
 jobs:
   timed-job:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'schedule' && github.event.schedule == 'cron(5 7 * * *)' && github.ref == 'refs/heads/dev' }}
     steps:
       - name: Set up time variables
         id: time
@@ -15,7 +18,7 @@ jobs:
           export TZ=Asia/Kolkata
           current_time=$(date +"%H:%M")
           echo "current_time=$current_time" >> $GITHUB_ENV
-          scheduled_time="13:05"
+          scheduled_time="${{ github.event.inputs.scheduled_time }}"
           echo "scheduled_time=$scheduled_time" >> $GITHUB_ENV
 
       - name: Check if triggered at the correct time
