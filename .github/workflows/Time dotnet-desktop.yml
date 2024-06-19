@@ -5,17 +5,19 @@ on:
     branches:
       - dev
   workflow_dispatch: # Allows manual triggering of the workflow
+  schedule:
+    - cron: '15 0 * * *' # This will trigger the workflow every day at 12:15 AM UTC
 
 jobs:
   timed-job:
-    if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/dev' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Set up time variables
         id: time
         run: |
-          echo "current_time=$(date -u +"%H:%M")" >> $GITHUB_ENV
-          echo "scheduled_time=08:00" >> $GITHUB_ENV
+          echo "current_time=$(date -u +'%H:%M')" >> $GITHUB_ENV
+          echo "scheduled_time=00:15" >> $GITHUB_ENV
 
       - name: Check if triggered at the correct time
         run: |
