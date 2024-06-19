@@ -1,16 +1,15 @@
-name: Scheduled Pipeline
+name: Dispatch and Scheduled Pipeline
 
 on:
-  push:
-    branches:
-      - dev
-  workflow_dispatch: # Allows manual triggering of the workflow
-  schedule:
-    - cron: '22 7 * * *' # This will trigger the workflow every day at 07:22 AM UTC (which is 12:52 PM IST)
+  workflow_dispatch:
+    inputs:
+      scheduled_time:
+        description: 'Scheduled Time in IST (HH:MM format)'
+        required: true
+        default: '13:10'
 
 jobs:
   timed-job:
-    if: github.ref == 'refs/heads/dev' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Set up time variables
@@ -19,7 +18,7 @@ jobs:
           export TZ=Asia/Kolkata
           current_time=$(date +"%H:%M")
           echo "current_time=$current_time" >> $GITHUB_ENV
-          scheduled_time="12:52"
+          scheduled_time="${{ github.event.inputs.scheduled_time }}"
           echo "scheduled_time=$scheduled_time" >> $GITHUB_ENV
 
       - name: Check if triggered at the correct time
@@ -34,4 +33,9 @@ jobs:
           scheduled_time: ${{ env.scheduled_time }}
 
       - name: Execute pipeline task
-        run: echo "Executing the pipeline task..."
+        run: |
+          # Use GitHub API to check if conditions (approvals, time delays) for the "pro" environment are met
+          # Example using GitHub Script:
+          # https://docs.github.com/en/rest/reference/repos#get-environment
+          # echo "::set-output name=conditions_met::true"
+          shell: /usr/bin/bash -e {0}
