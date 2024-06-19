@@ -3,7 +3,7 @@ name: Copy Files and Backup
 on:
   workflow_dispatch:
   schedule:
-    - cron: '59 08:59 * * *'  # Runs at 1:59 PM IST every day 
+    - cron: '20 08 * * *'  # Runs at 14:20 IST every day
   push:
     paths:
       - '40_copy_file.bat'
@@ -15,12 +15,12 @@ on:
 
 jobs:
   copy-files-and-backup:
-    runs-on: self-hosted  
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
+
       - name: Backup files
         run: |
           Get-ChildItem 'C:\Users\Suparaja\Documents\Test01' | ForEach-Object {
@@ -28,7 +28,7 @@ jobs:
             $zipFileName = $_.Name + ".zip"
             Compress-Archive -Path $_.FullName -DestinationPath "$destinationPath\$zipFileName" -Force
           }
-      
+
       - name: Run batch script
         run: |
           ./40_copy_file.bat
