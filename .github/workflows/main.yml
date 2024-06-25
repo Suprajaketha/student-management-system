@@ -1,0 +1,68 @@
+name: Salesforce Deployment Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Select branch to deploy from'
+        required: true
+        type: choice
+        options:
+          - main
+          - develop
+          - feature
+          - bugfix
+          - release
+      targetEnvironment:
+        description: 'Select target environment'
+        required: true
+        type: choice
+        options:
+          - Production
+          - Staging
+          - Sandbox
+          - UAT
+      testClasses:
+        description: 'Select test classes to run'
+        required: true
+        type: choice
+        options:
+          - AllTests
+          - SpecificTests
+          - NoTests
+          - CustomTests
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.inputs.branch }}
+
+    - name: Install Salesforce CLI
+      run: |
+        wget https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
+        tar xJf sfdx-linux-amd64.tar.xz
+        ./sfdx/install
+
+    - name: Authenticate with Salesforce
+      env:
+        SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+      run: |
+        echo $SFDX_AUTH_URL > sfdx-auth-url.txt
+        sfdx auth:sfdxurl:store -f sfdx-auth-url.txt
+
+    - name: Deploy to Salesforce
+      run: |
+        echo "Deploying to ${{ github.event.inputs.targetEnvironment }} environment"
+        if [ "${{ github.event.inputs.testClasses }}" == "AllTests" ]; then
+          sfdx force:source:deploy -p force-app/main/default -u ${{ github.event.inputs.targetEnvironment }} -l RunLocalTests
+        elif [ "${{ github.event.inputs.testClasses }}" == "SpecificTests" ]; then
+          sfdx force:source:deploy -p force-app/main/default -u ${{ github.event.inputs.targetEnvironment }} -l RunSpecifiedTests -r "MyTestClass1,MyTestClass2"
+        elif [ "${{ github.event.inputs.testClasses }}" == "CustomTests" ]; then
+          sfdx force:source:deploy -p force-app/main/default -u ${{ github.event.inputs.targetEnvironment }} -l RunSpecifiedTests -r "CustomTestClass1,CustomTestClass2"
+        else
+          sfdx force:source:deploy -p force-app/main/default -u ${{ github.event.inputs.targetEnvironment }}
