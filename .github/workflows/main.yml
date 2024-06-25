@@ -27,10 +27,10 @@ on:
         required: true
         type: choice
         options:
-          - AllTests
-          - SpecificTests
-          - NoTests
-          - CustomTests
+          - AtributeUtilities-Test
+          
+          
+          
 
 jobs:
   deploy:
